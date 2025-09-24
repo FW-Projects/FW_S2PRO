@@ -56,7 +56,6 @@
 #define C_F_CONVERT 2
 #define DISPLAY_LOCK 3
 #define SOUND_SWITCH 4
-#define SLEEP_TIME 5
 
 #define ADD_HOT 0
 #define REDUCE_HOT 1
@@ -252,13 +251,9 @@ typedef struct
     float last_cal_temp_c_display;
     float cal_temp_f_display;
     float last_cal_temp_f_display;
-    float linear_cal_temp;
-    float error_data;
 
     float pwm_out;
 
-    float set_time;
-    float sleep_time;
     float set_sleep_time;
     float last_set_sleep_time;
     float sleep_time_count;
@@ -267,7 +262,6 @@ typedef struct
     handle_state_e last_state;
 	bool run_disp_state;
 	bool last_run_disp_state;
-    float power_data;
     float last_power_data;
 
     uint8_t temp_buff[CURVE_BUFF_SIZE];
@@ -317,9 +311,7 @@ typedef enum
     UN_EXIT_ICON,          /* 88*34 */
     EXIT_ICON,             /* 88*34 */
     HANDLE_NOT_EXIST_ICON, /* 139*118 */
-                           //	NAVIGATION_BAR,			 /* 480*40 */
-                           //	SELECT_HANDLE_IN_DUAL,	 /* 223*211 */
-                           //	UNSELECT_HANDLE_IN_DUAL, /* 223*211 */
+
     SLEEP_ICON,
     SELECT_ICON,
     UN_SELECT_ICON,
@@ -340,15 +332,11 @@ typedef struct
     fws2_ota_state_e ota_state;
     fws2_uart_state_e uart_state;
 
-    bool key_on_flag;
-    bool set_flag;
 
     uint8_t ch;
     uint8_t last_ch;
     uint8_t save_ch;
-    uint8_t hot_mode;
 
-    uint16_t mcu_temp;
 
     /* ch set */
     float ch1_set_temp;
@@ -364,25 +352,10 @@ typedef struct
     float last_ch2_set_temp_f_display;
     float last_ch3_set_temp_f_display;
 
-    uint16_t key_out_time;
-    uint16_t key_set_time;
-    uint16_t menu_level;
-    char First_menu_number;
-    char Second_menu_number;
     uint8_t last_Heating_stick;
-    uint8_t pwm_updata_time;
 
 } general_parameter_t;
 
-typedef struct
-{
-    bool flicker_flag; // …¡À∏±Í÷æ
-    bool last_flicker_flag;
-    bool last_state_flag;
-
-    uint16_t flicker_time;
-    uint8_t display_number;
-} display_parameter_t;
 
 typedef struct
 {
@@ -398,7 +371,6 @@ typedef struct
     handle_error_state_e Direct_handle_error_state;
     handle_error_state_e last_Direct_handle_error_state;
     general_parameter_t general_parameter;
-    display_parameter_t display_parameter;
 
     work_mode_e work_mode;
     work_mode_e last_work_mode;

@@ -31,7 +31,7 @@ I (..\inc\wk_wdt.h)(0x68D26687)
 I (..\inc\wk_dma.h)(0x68D26687)
 I (..\inc\wk_gpio.h)(0x68D26687)
 I (..\inc\wk_system.h)(0x68D26687)
-I (..\app\FWS2pro_handle.h)(0x68D35A4A)
+I (..\app\FWS2pro_handle.h)(0x68D3A2E5)
 I (..\app\sensor.h)(0x68CA4C3A)
 I (..\inc\at32f415_int.h)(0x68D26687)
 I (..\app\iap.h)(0x68CE6AA0)
@@ -101,7 +101,7 @@ I (..\inc\wk_system.h)(0x68D26687)
 I (..\device\iap_usart.h)(0x68CA4C3A)
 I (..\system\tmt.h)(0x68CE6AC4)
 I (..\app\iap.h)(0x68CE6AA0)
-I (..\app\FWS2pro_Handle.h)(0x68D35A4A)
+I (..\app\FWS2pro_Handle.h)(0x68D3A2E5)
 I (..\app\output_handle.h)(0x68D25EFF)
 I (..\app\beep_handle.h)(0x68CE6A80)
 I (..\device\beep.h)(0x68CE6AD5)
@@ -636,8 +636,8 @@ I (..\..\libraries\drivers\inc\at32f415_spi.h)(0x689D860B)
 I (..\..\libraries\drivers\inc\at32f415_tmr.h)(0x689D860B)
 I (..\..\libraries\drivers\inc\at32f415_usart.h)(0x689D860B)
 I (..\..\libraries\drivers\inc\at32f415_wdt.h)(0x689D860B)
-I (..\app\FWS2pro_handle.h)(0x68D35A4A)
-F (..\app\display_handle.c)(0x68D39CB5)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=none -mfloat-abi=soft -c-fno-rtti -flto -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../libraries/drivers/inc -I ../../libraries/cmsis/cm4/core_support -I ../../libraries/cmsis/cm4/device_support -I ../inc -I ../app -I ../device -I ../system -I ../TFT2.8-I./RTE/CMSIS-View-I./RTE/_AT32F415CCT7_WorkBench-ID:/keil5.42/ARM/CMSIS-View/1.2.0/EventRecorder/Include-ID:/keil5.42/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/keil5.42/ArteryTek/AT32F415_DFP/2.1.6/Device/Include-ID:/keil5.42/GorgonMeducer/perf_counter/2.4.0-D__UVISION_VERSION="542" -DAT32F415CCT7 -D_RTE_ -DAT32F415CCT7 -DUSE_STDPERIPH_DRIVER  -include "Pre_Include_Global.h"-o ./objects/display_handle.o -MMD)
+I (..\app\FWS2pro_handle.h)(0x68D3A2E5)
+F (..\app\display_handle.c)(0x68D3A20C)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=none -mfloat-abi=soft -c-fno-rtti -flto -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../libraries/drivers/inc -I ../../libraries/cmsis/cm4/core_support -I ../../libraries/cmsis/cm4/device_support -I ../inc -I ../app -I ../device -I ../system -I ../TFT2.8-I./RTE/CMSIS-View-I./RTE/_AT32F415CCT7_WorkBench-ID:/keil5.42/ARM/CMSIS-View/1.2.0/EventRecorder/Include-ID:/keil5.42/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/keil5.42/ArteryTek/AT32F415_DFP/2.1.6/Device/Include-ID:/keil5.42/GorgonMeducer/perf_counter/2.4.0-D__UVISION_VERSION="542" -DAT32F415CCT7 -D_RTE_ -DAT32F415CCT7 -DUSE_STDPERIPH_DRIVER  -include "Pre_Include_Global.h"-o ./objects/display_handle.o -MMD)
 I (RTE\_AT32F415CCT7_WorkBench\Pre_Include_Global.h)(0x68CE1A8D)
 I (..\app\display_handle.h)(0x68CE6A4C)
 I (..\TFT2.8\lcd.h)(0x68D3917E)
@@ -661,7 +661,7 @@ I (..\..\libraries\drivers\inc\at32f415_usart.h)(0x689D860B)
 I (..\..\libraries\drivers\inc\at32f415_wdt.h)(0x689D860B)
 I (..\TFT2.8\lcd_init.h)(0x68CE6B1B)
 I (..\device\at32_spiflash.h)(0x68CE6ACE)
-I (..\app\FWS2pro_handle.h)(0x68D35A4A)
+I (..\app\FWS2pro_handle.h)(0x68D3A2E5)
 I (D:\keil5.42\GorgonMeducer\perf_counter\2.4.0\perf_counter.h)(0x68CE1A0A)
 I (D:\keil5.42\GorgonMeducer\perf_counter\2.4.0\perfc_port_default.h)(0x68CE1A0A)
 I (..\..\libraries\cmsis\cm4\core_support\cmsis_compiler.h)(0x689D860B)
@@ -687,10 +687,10 @@ I (..\..\libraries\drivers\inc\at32f415_spi.h)(0x689D860B)
 I (..\..\libraries\drivers\inc\at32f415_tmr.h)(0x689D860B)
 I (..\..\libraries\drivers\inc\at32f415_usart.h)(0x689D860B)
 I (..\..\libraries\drivers\inc\at32f415_wdt.h)(0x689D860B)
-I (..\app\FWS2pro_handle.h)(0x68D35A4A)
-F (..\app\FWS2pro_handle.c)(0x68D3879E)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=none -mfloat-abi=soft -c-fno-rtti -flto -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../libraries/drivers/inc -I ../../libraries/cmsis/cm4/core_support -I ../../libraries/cmsis/cm4/device_support -I ../inc -I ../app -I ../device -I ../system -I ../TFT2.8-I./RTE/CMSIS-View-I./RTE/_AT32F415CCT7_WorkBench-ID:/keil5.42/ARM/CMSIS-View/1.2.0/EventRecorder/Include-ID:/keil5.42/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/keil5.42/ArteryTek/AT32F415_DFP/2.1.6/Device/Include-ID:/keil5.42/GorgonMeducer/perf_counter/2.4.0-D__UVISION_VERSION="542" -DAT32F415CCT7 -D_RTE_ -DAT32F415CCT7 -DUSE_STDPERIPH_DRIVER  -include "Pre_Include_Global.h"-o ./objects/fws2pro_handle.o -MMD)
+I (..\app\FWS2pro_handle.h)(0x68D3A2E5)
+F (..\app\FWS2pro_handle.c)(0x68D3A2D9)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=none -mfloat-abi=soft -c-fno-rtti -flto -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../libraries/drivers/inc -I ../../libraries/cmsis/cm4/core_support -I ../../libraries/cmsis/cm4/device_support -I ../inc -I ../app -I ../device -I ../system -I ../TFT2.8-I./RTE/CMSIS-View-I./RTE/_AT32F415CCT7_WorkBench-ID:/keil5.42/ARM/CMSIS-View/1.2.0/EventRecorder/Include-ID:/keil5.42/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/keil5.42/ArteryTek/AT32F415_DFP/2.1.6/Device/Include-ID:/keil5.42/GorgonMeducer/perf_counter/2.4.0-D__UVISION_VERSION="542" -DAT32F415CCT7 -D_RTE_ -DAT32F415CCT7 -DUSE_STDPERIPH_DRIVER  -include "Pre_Include_Global.h"-o ./objects/fws2pro_handle.o -MMD)
 I (RTE\_AT32F415CCT7_WorkBench\Pre_Include_Global.h)(0x68CE1A8D)
-I (..\app\FWS2pro_handle.h)(0x68D35A4A)
+I (..\app\FWS2pro_handle.h)(0x68D3A2E5)
 I (..\..\libraries\cmsis\cm4\device_support\at32f415.h)(0x689D860B)
 I (..\..\libraries\cmsis\cm4\core_support\core_cm4.h)(0x689D860B)
 I (..\..\libraries\cmsis\cm4\device_support\system_at32f415.h)(0x68CE1468)
@@ -730,7 +730,7 @@ I (..\..\libraries\drivers\inc\at32f415_spi.h)(0x689D860B)
 I (..\..\libraries\drivers\inc\at32f415_tmr.h)(0x689D860B)
 I (..\..\libraries\drivers\inc\at32f415_usart.h)(0x689D860B)
 I (..\..\libraries\drivers\inc\at32f415_wdt.h)(0x689D860B)
-F (..\app\key_handle.c)(0x68D39D99)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=none -mfloat-abi=soft -c-fno-rtti -flto -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../libraries/drivers/inc -I ../../libraries/cmsis/cm4/core_support -I ../../libraries/cmsis/cm4/device_support -I ../inc -I ../app -I ../device -I ../system -I ../TFT2.8-I./RTE/CMSIS-View-I./RTE/_AT32F415CCT7_WorkBench-ID:/keil5.42/ARM/CMSIS-View/1.2.0/EventRecorder/Include-ID:/keil5.42/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/keil5.42/ArteryTek/AT32F415_DFP/2.1.6/Device/Include-ID:/keil5.42/GorgonMeducer/perf_counter/2.4.0-D__UVISION_VERSION="542" -DAT32F415CCT7 -D_RTE_ -DAT32F415CCT7 -DUSE_STDPERIPH_DRIVER  -include "Pre_Include_Global.h"-o ./objects/key_handle.o -MMD)
+F (..\app\key_handle.c)(0x68D3A2D9)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=none -mfloat-abi=soft -c-fno-rtti -flto -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../libraries/drivers/inc -I ../../libraries/cmsis/cm4/core_support -I ../../libraries/cmsis/cm4/device_support -I ../inc -I ../app -I ../device -I ../system -I ../TFT2.8-I./RTE/CMSIS-View-I./RTE/_AT32F415CCT7_WorkBench-ID:/keil5.42/ARM/CMSIS-View/1.2.0/EventRecorder/Include-ID:/keil5.42/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/keil5.42/ArteryTek/AT32F415_DFP/2.1.6/Device/Include-ID:/keil5.42/GorgonMeducer/perf_counter/2.4.0-D__UVISION_VERSION="542" -DAT32F415CCT7 -D_RTE_ -DAT32F415CCT7 -DUSE_STDPERIPH_DRIVER  -include "Pre_Include_Global.h"-o ./objects/key_handle.o -MMD)
 I (RTE\_AT32F415CCT7_WorkBench\Pre_Include_Global.h)(0x68CE1A8D)
 I (..\app\key_handle.h)(0x68D39DD9)
 I (..\device\key.h)(0x68CE6AE6)
@@ -754,10 +754,10 @@ I (..\..\libraries\drivers\inc\at32f415_usart.h)(0x689D860B)
 I (..\..\libraries\drivers\inc\at32f415_wdt.h)(0x689D860B)
 I (..\app\beep_handle.h)(0x68CE6A80)
 I (..\device\beep.h)(0x68CE6AD5)
-I (..\app\FWS2pro_handle.h)(0x68D35A4A)
+I (..\app\FWS2pro_handle.h)(0x68D3A2E5)
 I (..\..\libraries\cmsis\cm4\core_support\cmsis_armclang.h)(0x689D860B)
 I (..\system\PID_operation.h)(0x68CE6ABC)
-F (..\app\output_handle.c)(0x68D39E6E)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=none -mfloat-abi=soft -c-fno-rtti -flto -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../libraries/drivers/inc -I ../../libraries/cmsis/cm4/core_support -I ../../libraries/cmsis/cm4/device_support -I ../inc -I ../app -I ../device -I ../system -I ../TFT2.8-I./RTE/CMSIS-View-I./RTE/_AT32F415CCT7_WorkBench-ID:/keil5.42/ARM/CMSIS-View/1.2.0/EventRecorder/Include-ID:/keil5.42/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/keil5.42/ArteryTek/AT32F415_DFP/2.1.6/Device/Include-ID:/keil5.42/GorgonMeducer/perf_counter/2.4.0-D__UVISION_VERSION="542" -DAT32F415CCT7 -D_RTE_ -DAT32F415CCT7 -DUSE_STDPERIPH_DRIVER  -include "Pre_Include_Global.h"-o ./objects/output_handle.o -MMD)
+F (..\app\output_handle.c)(0x68D39F7D)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=none -mfloat-abi=soft -c-fno-rtti -flto -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../libraries/drivers/inc -I ../../libraries/cmsis/cm4/core_support -I ../../libraries/cmsis/cm4/device_support -I ../inc -I ../app -I ../device -I ../system -I ../TFT2.8-I./RTE/CMSIS-View-I./RTE/_AT32F415CCT7_WorkBench-ID:/keil5.42/ARM/CMSIS-View/1.2.0/EventRecorder/Include-ID:/keil5.42/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/keil5.42/ArteryTek/AT32F415_DFP/2.1.6/Device/Include-ID:/keil5.42/GorgonMeducer/perf_counter/2.4.0-D__UVISION_VERSION="542" -DAT32F415CCT7 -D_RTE_ -DAT32F415CCT7 -DUSE_STDPERIPH_DRIVER  -include "Pre_Include_Global.h"-o ./objects/output_handle.o -MMD)
 I (RTE\_AT32F415CCT7_WorkBench\Pre_Include_Global.h)(0x68CE1A8D)
 I (..\app\output_handle.h)(0x68D25EFF)
 I (..\inc\wk_system.h)(0x68D26687)
@@ -779,7 +779,7 @@ I (..\..\libraries\drivers\inc\at32f415_spi.h)(0x689D860B)
 I (..\..\libraries\drivers\inc\at32f415_tmr.h)(0x689D860B)
 I (..\..\libraries\drivers\inc\at32f415_usart.h)(0x689D860B)
 I (..\..\libraries\drivers\inc\at32f415_wdt.h)(0x689D860B)
-I (..\app\FWS2pro_handle.h)(0x68D35A4A)
+I (..\app\FWS2pro_handle.h)(0x68D3A2E5)
 I (..\system\PID_operation.h)(0x68CE6ABC)
 I (D:\keil5.42\GorgonMeducer\perf_counter\2.4.0\perf_counter.h)(0x68CE1A0A)
 I (D:\keil5.42\GorgonMeducer\perf_counter\2.4.0\perfc_port_default.h)(0x68CE1A0A)
@@ -1056,7 +1056,7 @@ I (..\..\libraries\drivers\inc\at32f415_wdt.h)(0x689D860B)
 I (..\TFT2.8\bsp_lcd_spi.h)(0x68CE6B00)
 I (..\TFT2.8\lcd_init.h)(0x68CE6B1B)
 I (..\TFT2.8\lcd_font.h)(0x68CA6AF7)
-I (..\app\FWS2pro_handle.h)(0x68D35A4A)
+I (..\app\FWS2pro_handle.h)(0x68D3A2E5)
 I (..\device\at32_spiflash.h)(0x68CE6ACE)
 F (..\TFT2.8\lcd_init.c)(0x68D0A5AA)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=none -mfloat-abi=soft -c-fno-rtti -flto -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../../libraries/drivers/inc -I ../../libraries/cmsis/cm4/core_support -I ../../libraries/cmsis/cm4/device_support -I ../inc -I ../app -I ../device -I ../system -I ../TFT2.8-I./RTE/CMSIS-View-I./RTE/_AT32F415CCT7_WorkBench-ID:/keil5.42/ARM/CMSIS-View/1.2.0/EventRecorder/Include-ID:/keil5.42/ARM/CMSIS/6.2.0/CMSIS/Core/Include-ID:/keil5.42/ArteryTek/AT32F415_DFP/2.1.6/Device/Include-ID:/keil5.42/GorgonMeducer/perf_counter/2.4.0-D__UVISION_VERSION="542" -DAT32F415CCT7 -D_RTE_ -DAT32F415CCT7 -DUSE_STDPERIPH_DRIVER  -include "Pre_Include_Global.h"-o ./objects/lcd_init.o -MMD)
 I (RTE\_AT32F415CCT7_WorkBench\Pre_Include_Global.h)(0x68CE1A8D)

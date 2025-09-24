@@ -1059,7 +1059,7 @@ static number power_data_1 =
     {
         .x = 8,
         .y = 198,
-        .num = &sFWS2_t.base.power_data,
+        .num = &sFWS2_t.base.pwm_out,
         .len = 3,
         .fc = WHITE,
         .bc = BLACK,

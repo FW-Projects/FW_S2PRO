@@ -656,7 +656,6 @@ static void key_event_handle(void)
 			sFWS2_t.base.set_temp_f_display = 9 * sFWS2_t.general_parameter.ch1_set_temp / 5 + 32;
 		}
 		sFWS2_t.general_parameter.ch = 1;
-		sFWS2_t.display_parameter.display_number = Disp_Set;
 		break;
 	case GET_CHANNEL_2:
 		sFWS2_t.base.set_temp = sFWS2_t.general_parameter.ch2_set_temp;
@@ -665,7 +664,6 @@ static void key_event_handle(void)
 			sFWS2_t.base.set_temp_f_display = 9 * sFWS2_t.general_parameter.ch2_set_temp / 5 + 32;
 		}
 		sFWS2_t.general_parameter.ch = 2;
-		sFWS2_t.display_parameter.display_number = Disp_Set;
 		break;
 	case GET_CHANNEL_3:
 		sFWS2_t.base.set_temp = sFWS2_t.general_parameter.ch3_set_temp;
@@ -674,7 +672,6 @@ static void key_event_handle(void)
 			sFWS2_t.base.set_temp_f_display = 9 * sFWS2_t.general_parameter.ch3_set_temp / 5 + 32;
 		}
 		sFWS2_t.general_parameter.ch = 3;
-		sFWS2_t.display_parameter.display_number = Disp_Set;
 
 		break;
 	case SET_CHANNEL_3:
@@ -762,7 +759,6 @@ static void key_event_handle(void)
 			}
 		}
 		sFWS2_t.general_parameter.ch = 0;
-		sFWS2_t.display_parameter.display_number = Disp_Set;
 		sbeep.status = BEEP_SHORT;
 		EVENT = END_EVENT;
 		break;
@@ -791,7 +787,6 @@ static void key_event_handle(void)
 			}
 		}
 		sFWS2_t.general_parameter.ch = 0;
-		sFWS2_t.display_parameter.display_number = Disp_Set;
 		sbeep.status = BEEP_SHORT;
 		EVENT = END_EVENT;
 		break;
