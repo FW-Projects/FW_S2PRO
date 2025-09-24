@@ -1,0 +1,24 @@
+{
+    "files.associations": {
+        "fws2pro_handle.h": "c",
+        "display_handle.h": "c",
+        "output_handle.h": "c",
+        "beep_handle.h": "c",
+        "flash_handle.h": "c",
+        "iap.h": "c",
+        "pc_comm_handle.h": "c",
+        "pid_operation.h": "c",
+        "tmt.h": "c",
+        "at32_spiflash.h": "c",
+        "beep.h": "c",
+        "flash.h": "c",
+        "key.h": "c",
+        "util_queue.h": "c",
+        "at32_usart.h": "c",
+        "bsp_lcd_spi.h": "c",
+        "c_lib.h": "c",
+        "lcd.h": "c",
+        "stdint.h": "c",
+        "lcd_init.h": "c"
+    }
+}
