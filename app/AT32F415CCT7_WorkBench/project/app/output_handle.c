@@ -5,9 +5,11 @@
 #include "math.h"
 #include "perf_counter.h"
 #include "adc_filter.h"
+#include "display_handle.h"
 
 static void check_error_state(void);
 static void check_handle(void);
+static void check_rpc(void);
 uint8_t Check_temp_difference(uint16_t in_set, uint16_t in_real, char in_dif);
 
 uint8_t off_set_buff[26] = {8, 7, 5, 4, 3, 2, 2, 2, 1, 0,
@@ -17,8 +19,10 @@ uint8_t off_set_buff[26] = {8, 7, 5, 4, 3, 2, 2, 2, 1, 0,
 void output_handle(void)
 {
 	check_handle();
-	check_error_state();
+	check_error_state();  
+//	check_current();
 }
+
 
 static void check_error_state(void)
 {
@@ -34,11 +38,17 @@ static void check_error_state(void)
 				{
 					sFWS2_t.Direct_handle_error_state = HANDLE_NO_ERR;
 				}
-				else if (sFWS2_t.base.actual_temp > MAX_ACTUAL_TEMP)
+				else if(sFWS2_t.base.actual_temp > MAX_MAX_ACTUAL_TEMP)
+				{
+					sFWS2_t.Direct_handle_error_state = HANDLE_NO_ERR;
+				}
+				else if (sFWS2_t.base.actual_temp > MAX_ACTUAL_TEMP && sFWS2_t.base.actual_temp < MAX_MAX_ACTUAL_TEMP)
 				{
 					sFWS2_t.Direct_handle_error_state = HANDLE_OVER_TEMP_ERR;
 				}
-				else if (sFWS2_t.base.actual_temp < MIN_ACTUAL_TEMP)
+				else if (sFWS2_t.base.actual_temp < MIN_ACTUAL_TEMP &&
+						sFWS2_t.Direct_handle_position == NOT_IN_POSSITION &&
+						sFWS2_t.Direct_handle_error_state != HANDLE_OVER_CURRENT)
 				{
 					sFWS2_t.Direct_handle_error_state = HANDLE_LOW_TEMP_ERR;
 				}
@@ -47,39 +57,74 @@ static void check_error_state(void)
 		else
 		{
 			sFWS2_t.base.error_time = 0;
-			sFWS2_t.Direct_handle_error_state = HANDLE_OK;
+			if(sFWS2_t.Direct_handle_error_state  != HANDLE_OVER_CURRENT)
+				sFWS2_t.Direct_handle_error_state = HANDLE_OK;
 		}
 	}
-	else if (sFWS2_t.Direct_handle_state == HANDLE_SLEEP)
+//	else if (sFWS2_t.Direct_handle_state == HANDLE_SLEEP)
+	else 
 	{
 		sFWS2_t.base.error_time = 0;
-		sFWS2_t.Direct_handle_error_state = HANDLE_OK;
+		if(sFWS2_t.Direct_handle_error_state  != HANDLE_OVER_CURRENT)
+			sFWS2_t.Direct_handle_error_state = HANDLE_OK;
 	}
+}
+
+void check_current(void)
+{
+	static uint8_t over_times = 0x00;
+	/*over current check*/
+	sFWS2_t.base.current_data = get_adcval(ADC_CHANNEL_8);
+
+	if(sFWS2_t.Direct_handle_Heating_stick == HANDLE_245)
+	{
+		if(sFWS2_t.base.current_data > 2200)
+		{
+			sFWS2_t.Direct_handle_error_state = HANDLE_OVER_CURRENT;
+		}
+	}
+	else if(sFWS2_t.Direct_handle_Heating_stick == HANDLE_210)
+	{
+		if(sFWS2_t.base.current_data > 2300)
+		{
+			sFWS2_t.Direct_handle_error_state = HANDLE_OVER_CURRENT;
+		}
+	}
+	
+
 }
 
 void check_handle(void)
 {
 	static bool select_flag = false;
-	static uint8_t sleep_times = 0,no_sleep_times = 0;
+	static uint8_t rpc_times = 0;
+	static uint8_t last_position_state = NOT_IN_POSSITION;
+	static uint8_t sleep_times = 0, no_sleep_times = 0;
 	// check sleep
 	if (gpio_input_data_bit_read(GPIOB, GPIO_PINS_8) == true)
 	{
 		no_sleep_times++;
 		sleep_times = 0;
-		if(no_sleep_times > 1)
+		if (no_sleep_times > 1)
 		{
 			no_sleep_times = 0;
 			sFWS2_t.Direct_handle_position = NOT_IN_POSSITION;
+			if(last_position_state == IN_POSSITION)
+			{
+				actual_refesh_time = 0;
+			}
+			last_position_state = sFWS2_t.Direct_handle_position;
 		}
 	}
 	else
 	{
 		sleep_times++;
 		no_sleep_times = 0;
-		if(sleep_times > 1)
+		if (sleep_times > 1)
 		{
 			sleep_times = 0;
 			sFWS2_t.Direct_handle_position = IN_POSSITION;
+			last_position_state = sFWS2_t.Direct_handle_position;
 		}
 	}
 
@@ -92,7 +137,7 @@ void check_handle(void)
 	{
 		sFWS2_t.Direct_handle_Heating_stick = HANDLE_210;
 	}
-	else
+	else 
 	{
 		sFWS2_t.Direct_handle_Heating_stick = HANDLE_NO;
 	}
@@ -100,10 +145,17 @@ void check_handle(void)
 	// check rpc
 	if (gpio_input_data_bit_read(GPIOB, GPIO_PINS_6) == false)
 	{
-		sFWS2_t.Direct_handle_rpc = IN_RPC;
+		rpc_times++;
+		if(rpc_times > 5)
+		{
+			rpc_times = 0;
+			sFWS2_t.Direct_handle_rpc = IN_RPC;
+		}
+		
 	}
 	else
 	{
+		rpc_times = 0;
 		sFWS2_t.Direct_handle_rpc = NOT_IN_RPC;
 	}
 }
@@ -143,9 +195,7 @@ void pwm_control(void)
 	sFWS2_t.base.actual_temp = move_average_filter(&s1_adc) >> 2;
 
 	/* pid control */
-	if (sFWS2_t.Direct_handle_error_state == HANDLE_OK &&
-		sFWS2_t.Direct_handle_position == NOT_IN_POSSITION &&
-		sFWS2_t.Direct_handle_rpc == NOT_IN_RPC)
+	if (sFWS2_t.Direct_handle_error_state == HANDLE_OK && sFWS2_t.Direct_handle_state == HANDLE_WORKING)
 	{
 		if (temp <= (sFWS2_t.base.set_temp + 30) &&
 			temp >= (sFWS2_t.base.set_temp - 30))
@@ -162,10 +212,14 @@ void pwm_control(void)
 		else if (temp > (sFWS2_t.base.set_temp + 30))
 		{
 			// È«¹¦ÂÊ¼õÎÂ
+			PID_Clear_I(&pid_210);
+			PID_Clear_I(&pid_245);
 			sFWS2_t.base.pwm_out = 0;
 		}
 		else
 		{
+			PID_Clear_I(&pid_210);
+			PID_Clear_I(&pid_245);
 			if (sFWS2_t.Direct_handle_Heating_stick == HANDLE_245)
 			{
 				sFWS2_t.base.pwm_out = 10000;
@@ -180,7 +234,11 @@ void pwm_control(void)
 	{
 		sFWS2_t.base.pwm_out = 0;
 	}
-	else if(sFWS2_t.Direct_handle_error_state != HANDLE_OK)
+	else if(sFWS2_t.Direct_handle_state == HANDLE_RPC)
+	{
+		sFWS2_t.base.pwm_out = 0;
+	}
+	else if (sFWS2_t.Direct_handle_error_state != HANDLE_OK)
 	{
 		sFWS2_t.base.pwm_out = 0x00;
 	}
@@ -199,10 +257,12 @@ void sleep_control(void)
 
 		if (sFWS2_t.base.sleep_time_count)
 		{
+			sFWS2_t.Direct_handle_state = HANDLE_WORKING;
 			time_count_ms++;
 
 			if (time_count_ms >= 1000)
 			{
+				
 				time_count_ms = 0;
 				time_count_s++;
 
@@ -259,6 +319,19 @@ void sleep_control(void)
 		}
 	}
 }
+
+void rpc_control(void)
+{
+	if(sFWS2_t.Direct_handle_rpc == IN_RPC)
+	{
+		sFWS2_t.Direct_handle_state = HANDLE_RPC;
+	}
+	else if(sFWS2_t.Direct_handle_rpc == NOT_IN_RPC)
+	{
+		sFWS2_t.Direct_handle_state = HANDLE_WORKING;
+	}
+}
+
 
 uint8_t linear_correction(uint16_t user_set_temp)
 {

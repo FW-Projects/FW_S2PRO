@@ -1,27 +1,27 @@
 /* add user code begin Header */
 /**
-  **************************************************************************
-  * @file     at32f415_int.c
-  * @brief    main interrupt service routines.
-  **************************************************************************
-  *                       Copyright notice & Disclaimer
-  *
-  * The software Board Support Package (BSP) that is made available to
-  * download from Artery official website is the copyrighted work of Artery.
-  * Artery authorizes customers to use, copy, and distribute the BSP
-  * software and its related documentation for the purpose of design and
-  * development in conjunction with Artery microcontrollers. Use of the
-  * software is governed by this copyright notice and the following disclaimer.
-  *
-  * THIS SOFTWARE IS PROVIDED ON "AS IS" BASIS WITHOUT WARRANTIES,
-  * GUARANTEES OR REPRESENTATIONS OF ANY KIND. ARTERY EXPRESSLY DISCLAIMS,
-  * TO THE FULLEST EXTENT PERMITTED BY LAW, ALL EXPRESS, IMPLIED OR
-  * STATUTORY OR OTHER WARRANTIES, GUARANTEES OR REPRESENTATIONS,
-  * INCLUDING BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY,
-  * FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.
-  *
-  **************************************************************************
-  */
+ **************************************************************************
+ * @file     at32f415_int.c
+ * @brief    main interrupt service routines.
+ **************************************************************************
+ *                       Copyright notice & Disclaimer
+ *
+ * The software Board Support Package (BSP) that is made available to
+ * download from Artery official website is the copyrighted work of Artery.
+ * Artery authorizes customers to use, copy, and distribute the BSP
+ * software and its related documentation for the purpose of design and
+ * development in conjunction with Artery microcontrollers. Use of the
+ * software is governed by this copyright notice and the following disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED ON "AS IS" BASIS WITHOUT WARRANTIES,
+ * GUARANTEES OR REPRESENTATIONS OF ANY KIND. ARTERY EXPRESSLY DISCLAIMS,
+ * TO THE FULLEST EXTENT PERMITTED BY LAW, ALL EXPRESS, IMPLIED OR
+ * STATUTORY OR OTHER WARRANTIES, GUARANTEES OR REPRESENTATIONS,
+ * INCLUDING BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.
+ *
+ **************************************************************************
+ */
 /* add user code end Header */
 
 /* includes ------------------------------------------------------------------*/
@@ -225,59 +225,63 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* add user code begin SysTick_IRQ 0 */
-	static uint8_t pid_run_time = 10;
-	static uint8_t beep_run_time = BEEP_HANDLE_TIME;
-	static uint8_t key_run_time = KEY_HANDLE_TIME;
-	static uint8_t beep_warning_time = 10;
-	
-	beep_run_time--;
+  static uint8_t pid_run_time = 10;
+  static uint8_t beep_run_time = BEEP_HANDLE_TIME;
+  static uint8_t key_run_time = KEY_HANDLE_TIME;
+  static uint8_t beep_warning_time = 10;
 
-	if (!beep_run_time)
-	{
-	beep_run_time = BEEP_HANDLE_TIME;
+	
+  beep_run_time--;
 
-	if (sFWS2_t.general_parameter.speak_state == SPEAKER_OPEN)
-	{
-	  beep_handle();
+  if (!beep_run_time)
+  {
+    beep_run_time = BEEP_HANDLE_TIME;
 
-	  if (sFWS2_t.Direct_handle_error_state != HANDLE_OK)
-	  {
-		beep_warning_time--;
-		if (!beep_warning_time)
-		{
-		  beep_warning_time = 40;
-		  sbeep.status = BEEP_LONG;
-		}
-	  }
-	}
-	}
-	
-	key_run_time--;
-	if (!key_run_time)
-	{
-		key_run_time = KEY_HANDLE_TIME;
-		key_handle();
-	}
-	
-	pid_run_time--;
-	if(!pid_run_time)
-	{
-		tmr_channel_value_set(TMR2,TMR_SELECT_CHANNEL_4,0);
-		delay_us(100);
-		pwm_control();
-		tmr_channel_value_set(TMR2,TMR_SELECT_CHANNEL_4,sFWS2_t.base.pwm_out);
-		tmr_counter_enable(TMR2, TRUE);
-		pid_run_time = 10;
-	}
-	
+    if (sFWS2_t.general_parameter.speak_state == SPEAKER_OPEN)
+    {
+      beep_handle();
+      if (sFWS2_t.Direct_handle_error_state != HANDLE_OK)
+      {
+        beep_warning_time--;
+        if (!beep_warning_time)
+        {
+          beep_warning_time = 40;
+          sbeep.status = BEEP_LONG;
+        }
+      }
+    }
+  }
+  key_run_time--;
+  if (!key_run_time)
+  {
+    key_run_time = KEY_HANDLE_TIME;
+    key_handle();
+  }
+
+  pid_run_time--;
+  if (!pid_run_time)
+  {
+    tmr_channel_value_set(TMR2, TMR_SELECT_CHANNEL_4, 0);
+    delay_us(100);
+	check_current();
+    pwm_control();
+    tmr_channel_value_set(TMR2, TMR_SELECT_CHANNEL_4, sFWS2_t.base.pwm_out);
+    tmr_counter_enable(TMR2, TRUE);
+//    pid_run_time = 10;
+	pid_run_time = 5;
+  }
+	rpc_control();
+
 	sleep_control();
+
+
   /* add user code end SysTick_IRQ 0 */
 
   wk_timebase_handler();
 
   /* add user code begin SysTick_IRQ 1 */
-	tmt.tick();
-	USART1_TimeOutCounter();
+  tmt.tick();
+  USART1_TimeOutCounter();
   /* add user code end SysTick_IRQ 1 */
 }
 
@@ -286,15 +290,7 @@ void SysTick_Handler(void)
   * @param  none
   * @retval none
   */
-//void USART1_IRQHandler(void)
-//{
-//  /* add user code begin USART1_IRQ 0 */
 
-//  /* add user code end USART1_IRQ 0 */
-//  /* add user code begin USART1_IRQ 1 */
-
-//  /* add user code end USART1_IRQ 1 */
-//}
 
 /* add user code begin 1 */
 

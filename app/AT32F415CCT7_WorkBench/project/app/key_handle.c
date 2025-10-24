@@ -3,238 +3,46 @@
 #include "FWS2pro_handle.h"
 #include "cmsis_armclang.h"
 #include "PID_operation.h"
+
+KEY_DEFINE(key_up, GPIOA, GPIO_PINS_12, 0);
+KEY_DEFINE(key_down, GPIOB, GPIO_PINS_9, 0);
+KEY_DEFINE(key_ch1, GPIOB, GPIO_PINS_5, 0);
+KEY_DEFINE(key_ch2, GPIOA, GPIO_PINS_15, 0);
+KEY_DEFINE(key_ch3, GPIOF, GPIO_PINS_7, 0);
+KEY_DEFINE(key_set, GPIOF, GPIO_PINS_6, 0);
+KEY_DEFINE(key_rpc, GPIOB, GPIO_PINS_6, 0);
+
+#define KEY_COUNT 7
 static handle_event EVENT = END_EVENT;
-void KeyProc(void);
+key_obj *keys[KEY_COUNT] = {&key_up, &key_down, &key_ch1, &key_ch2, &key_ch3, &key_set, &key_rpc};
+key_event_t key_event[KEY_COUNT];
 
-static KEY_VALUE get_key_up()
+void handle_key_events(void)
 {
-	if (READ_KEY_UP == 0)
-	{
-		return K_PRESS;
-	}
-	else
-	{
-		return K_RELEASE;
-	}
-}
+	static bool first_in = false;
 
-static KEY_VALUE get_key_down()
-{
-	if (READ_KEY_DOWN == 0)
+	if (first_in == false)
 	{
-		return K_PRESS;
+		first_in = true;
+		key_set_scan_interval(KEY_TASK_TIME);
+		key_set_timing_simple(&key_up, KEY_TASK_TIME, 1500, 0, 20);
+		key_set_timing_simple(&key_down, KEY_TASK_TIME, 1500, 0, 20);
+		key_set_timing_simple(&key_ch1, KEY_TASK_TIME, 1500, 0, 0);
+		key_set_timing_simple(&key_ch2, KEY_TASK_TIME, 1500, 0, 0);
+		key_set_timing_simple(&key_ch3, KEY_TASK_TIME, 1500, 0, 0);
+		key_set_timing_simple(&key_set, KEY_TASK_TIME, 1500, 300, 0);
+		key_set_timing_simple(&key_rpc, KEY_TASK_TIME, 1500, 0, 0);
 	}
-	else
+	for (int i = 0; i < KEY_COUNT; i++)
 	{
-		return K_RELEASE;
-	}
-}
-
-static KEY_VALUE get_key_ch1()
-{
-	if (READ_KEY_CH1 == 0)
-	{
-		return K_PRESS;
-	}
-	else
-	{
-		return K_RELEASE;
-	}
-}
-
-static KEY_VALUE get_key_ch2()
-{
-	if (READ_KEY_CH2 == 0)
-	{
-		return K_PRESS;
+		key_event[i] = key_event_check(keys[i]);
 	}
 
-	else
+	if (key_event[0] != KEY_NONE)
 	{
-		return K_RELEASE;
-	}
-}
-
-static KEY_VALUE get_key_ch3()
-{
-	if (READ_KEY_CH3 == 0)
-	{
-		return K_PRESS;
-	}
-	else
-	{
-		return K_RELEASE;
-	}
-}
-
-static KEY_VALUE get_key_set()
-{
-	if (READ_KEY_SET == 0)
-	{
-		return K_PRESS;
-	}
-	else
-	{
-		return K_RELEASE;
-	}
-}
-
-static KEY keys[] =
-	{
-		{KS_RELEASE, 0, KEY_CYCLE_TIME, get_key_ch1},  // ch1
-		{KS_RELEASE, 0, KEY_CYCLE_TIME, get_key_ch2},  // ch2
-		{KS_RELEASE, 0, KEY_CYCLE_TIME, get_key_ch3},  // ch3
-		{KS_RELEASE, 0, KEY_CYCLE_TIME, get_key_up},   // add
-		{KS_RELEASE, 0, KEY_CYCLE_TIME, get_key_down}, // reduce
-		{KS_RELEASE, 0, KEY_CYCLE_TIME, get_key_set},  // set
-};
-
-static KEY_EVENT key_up, key_down, key_ch1, key_ch2, key_ch3, key_set;
-
-void KeyProc(void)
-{
-	static bool set_done = false;
-	if (get_key_down() == K_RELEASE &&
-		get_key_ch3() == K_RELEASE &&
-		get_key_ch1() == K_RELEASE &&
-		get_key_set() == K_RELEASE &&
-		get_key_ch2() == K_RELEASE &&
-		get_key_up() == K_RELEASE)
-	{
-		set_done = false;
-	}
-
-	/* scan key begin */
-	key_ch1 = key_event_check(&keys[0], LONG_PRESS_TIME);
-	key_ch2 = key_event_check(&keys[1], LONG_PRESS_TIME);
-	key_ch3 = key_event_check(&keys[2], LONG_PRESS_TIME);
-	key_up = key_event_check(&keys[3], LONG_PRESS_TIME);
-	key_down = key_event_check(&keys[4], LONG_PRESS_TIME);
-	key_set = key_event_check(&keys[5], LONG_PRESS_TIME);
-	/* scan key end */
-
-	if (set_done == 0)
-	{
-		/*get event*/
-		/* key no set perss */
-		if (key_ch1 == KE_PRESS)
+		switch (key_event[0])
 		{
-			EVENT = GET_CHANNEL_1;
-			sbeep.status = BEEP_SHORT;
-			set_done = TRUE;
-		}
-		else if (key_ch2 == KE_PRESS)
-		{
-			EVENT = GET_CHANNEL_2;
-			sbeep.status = BEEP_SHORT;
-			set_done = TRUE;
-		}
-		else if (key_ch3 == KE_PRESS)
-		{
-			EVENT = GET_CHANNEL_3;
-			sbeep.status = BEEP_SHORT;
-			set_done = TRUE;
-		}
-		else if (key_down == KE_PRESS)
-		{
-			if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245 || sFWS2_t.page == CURVE_PAGE)
-			{
-				// 减少温度
-				EVENT = TEMP_REDUCE;
-			}
-			else if (sFWS2_t.page >= SELECT_SET_WORK_PAGE && sFWS2_t.page <= SELECT_EXIT_MENU_PAGE)
-			{
-				// 切换菜单
-				EVENT = PAGE_REDUCE;
-			}
-			else if (sFWS2_t.page == SET_WORK_PAGE)
-			{
-				// 设置工作模式
-				EVENT = SET_WORK_MODE;
-			}
-			else if (sFWS2_t.page == SET_UNIT_PAGE)
-			{
-				// 设置温度单位
-				EVENT = SET_TEMP_UNIT;
-			}
-			else if (sFWS2_t.page == SET_TEMP_CAL_PAGE)
-			{
-				// 设置温度校准
-				if (sFWS2_t.set_cal == SET_CAL)
-				{
-					EVENT = SET_CAL_TEMP_REDUCE;
-				}
-				else if (sFWS2_t.set_cal == SET_RETURN_CAL)
-				{
-					sFWS2_t.page = SET_TEMP_CAL_PAGE;
-					sFWS2_t.set_cal = SET_CAL;
-					sFWS2_t.base.last_cal_temp_c_display = RESET_VALUE;
-					sFWS2_t.base.last_cal_temp_f_display = RESET_VALUE;
-				}
-			}
-			else if (sFWS2_t.page == SET_SPEAK_PAGE)
-			{
-				// 设置声音
-				EVENT = SET_SPEAK_MODE;
-			}
-			else if (sFWS2_t.page == SET_TEMP_LOCK_PAGE)
-			{
-				// 设置温度锁
-				EVENT = SET_TEMP_LOCK;
-			}
-			else if (sFWS2_t.page == SET_SLEEP_PAGE)
-			{
-				// 设置睡眠时间
-				if (sFWS2_t.set_sleep == SET_SLEEP)
-				{
-					EVENT = SET_SLEEP_TIME_REDUCE;
-				}
-				else if (sFWS2_t.set_sleep == SET_RETURN_SLEEP)
-				{
-					sFWS2_t.page = SET_SLEEP_PAGE;
-					sFWS2_t.set_sleep = SET_SLEEP;
-				}
-			}
-			else if (sFWS2_t.page == SET_RESET_PAGE)
-			{
-				// 设置恢复出厂设置
-				if (sFWS2_t.set_reset1 == RESET_RETURN)
-				{
-					sFWS2_t.set_reset1 = RESET_CONFIRN;
-				}
-				else if (sFWS2_t.set_reset1 == RESET_CONFIRN)
-				{
-					sFWS2_t.set_reset1 = RESET_RETURN;
-				}
-			}
-			else if (sFWS2_t.page == SET_RESET_DONE_PAGE)
-			{
-				// 设置恢复出厂设置确认
-				if (sFWS2_t.set_reset2 == RESET2_RETURN)
-				{
-					sFWS2_t.set_reset2 = RESET2_CONFIRN;
-				}
-				else if (sFWS2_t.set_reset2 == RESET2_CONFIRN)
-				{
-					sFWS2_t.set_reset2 = RESET2_RETURN;
-				}
-			}
-			else if (sFWS2_t.page == SET_VERSION_PAGE)
-			{
-				// 设置版本信息
-				if (sFWS2_t.set_vision == VISION_RETURN)
-				{
-					sFWS2_t.set_vision = VISION_START;
-				}
-				else if (sFWS2_t.set_vision == VISION_START)
-				{
-					sFWS2_t.set_vision = VISION_RETURN;
-				}
-			}
-			sbeep.status = BEEP_SHORT;
-			set_done = TRUE;
-		}
-		else if (key_up == KE_PRESS)
+		case KEY_SHORT_PRESS:
 		{
 			if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245 || sFWS2_t.page == CURVE_PAGE)
 			{
@@ -292,6 +100,7 @@ void KeyProc(void)
 				{
 					sFWS2_t.page = SET_SLEEP_PAGE;
 					sFWS2_t.set_sleep = SET_SLEEP;
+					sFWS2_t.base.last_set_sleep_time = RESET_VALUE;
 				}
 			}
 			else if (sFWS2_t.page == SET_RESET_PAGE)
@@ -331,11 +140,230 @@ void KeyProc(void)
 				}
 			}
 			sbeep.status = BEEP_SHORT;
-			set_done = TRUE;
+			break;
 		}
-		/* key  perss */
-		else if (key_set == KE_PRESS)
+		case KEY_LONG_PRESS_CONTINUE:
 		{
+			if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245 || sFWS2_t.page == CURVE_PAGE)
+			{
+				// 减少温度
+				EVENT = TEMP_ADD_FIVE;
+			}
+			else if (sFWS2_t.page == SET_TEMP_CAL_PAGE)
+			{
+				// 设置温度校准
+				if (sFWS2_t.set_cal == SET_CAL)
+				{
+					EVENT = SET_CAL_TEMP_ADD_FIVE;
+				}
+			}
+			else if (sFWS2_t.page == SET_SLEEP_PAGE)
+			{
+				// 设置睡眠时间
+				if (sFWS2_t.set_sleep == SET_SLEEP)
+				{
+					EVENT = SET_SLEEP_TIME_ADD_FIVE;
+				}
+			}
+			break;
+		}
+		default:
+			break;
+		}
+	}
+	if (key_event[1] != KEY_NONE)
+	{
+		switch (key_event[1])
+		{
+		case KEY_SHORT_PRESS:
+		{
+			if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245 || sFWS2_t.page == CURVE_PAGE)
+			{
+				// 减少温度
+				EVENT = TEMP_REDUCE;
+			}
+			else if (sFWS2_t.page >= SELECT_SET_WORK_PAGE && sFWS2_t.page <= SELECT_EXIT_MENU_PAGE)
+			{
+				// 切换菜单
+				EVENT = PAGE_REDUCE;
+			}
+			else if (sFWS2_t.page == SET_WORK_PAGE)
+			{
+				// 设置工作模式
+				EVENT = SET_WORK_MODE;
+			}
+			else if (sFWS2_t.page == SET_UNIT_PAGE)
+			{
+				// 设置温度单位
+				EVENT = SET_TEMP_UNIT;
+			}
+			else if (sFWS2_t.page == SET_TEMP_CAL_PAGE)
+			{
+				// 设置温度校准
+				if (sFWS2_t.set_cal == SET_CAL)
+				{
+					EVENT = SET_CAL_TEMP_REDUCE;
+				}
+				else if (sFWS2_t.set_cal == SET_RETURN_CAL)
+				{
+					sFWS2_t.page = SET_TEMP_CAL_PAGE;
+					sFWS2_t.set_cal = SET_CAL;
+					sFWS2_t.base.last_cal_temp_c_display = RESET_VALUE;
+					sFWS2_t.base.last_cal_temp_f_display = RESET_VALUE;
+				}
+			}
+			else if (sFWS2_t.page == SET_SPEAK_PAGE)
+			{
+				// 设置声音
+				EVENT = SET_SPEAK_MODE;
+			}
+			else if (sFWS2_t.page == SET_TEMP_LOCK_PAGE)
+			{
+				// 设置温度锁
+				EVENT = SET_TEMP_LOCK;
+			}
+			else if (sFWS2_t.page == SET_SLEEP_PAGE)
+			{
+				// 设置睡眠时间
+				if (sFWS2_t.set_sleep == SET_SLEEP)
+				{
+					EVENT = SET_SLEEP_TIME_REDUCE;
+				}
+				else if (sFWS2_t.set_sleep == SET_RETURN_SLEEP)
+				{
+					sFWS2_t.page = SET_SLEEP_PAGE;
+					sFWS2_t.set_sleep = SET_SLEEP;
+					sFWS2_t.base.last_set_sleep_time = RESET_VALUE;
+				}
+			}
+			else if (sFWS2_t.page == SET_RESET_PAGE)
+			{
+				// 设置恢复出厂设置
+				if (sFWS2_t.set_reset1 == RESET_RETURN)
+				{
+					sFWS2_t.set_reset1 = RESET_CONFIRN;
+				}
+				else if (sFWS2_t.set_reset1 == RESET_CONFIRN)
+				{
+					sFWS2_t.set_reset1 = RESET_RETURN;
+				}
+			}
+			else if (sFWS2_t.page == SET_RESET_DONE_PAGE)
+			{
+				// 设置恢复出厂设置确认
+				if (sFWS2_t.set_reset2 == RESET2_RETURN)
+				{
+					sFWS2_t.set_reset2 = RESET2_CONFIRN;
+				}
+				else if (sFWS2_t.set_reset2 == RESET2_CONFIRN)
+				{
+					sFWS2_t.set_reset2 = RESET2_RETURN;
+				}
+			}
+			else if (sFWS2_t.page == SET_VERSION_PAGE)
+			{
+				// 设置版本信息
+				if (sFWS2_t.set_vision == VISION_RETURN)
+				{
+					sFWS2_t.set_vision = VISION_START;
+				}
+				else if (sFWS2_t.set_vision == VISION_START)
+				{
+					sFWS2_t.set_vision = VISION_RETURN;
+				}
+			}
+			sbeep.status = BEEP_SHORT;
+			break;
+		}
+		case KEY_LONG_PRESS_CONTINUE:
+		{
+			if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245 || sFWS2_t.page == CURVE_PAGE)
+			{
+				// 减少温度
+				EVENT = TEMP_REDUCE_FIVE;
+			}
+			else if (sFWS2_t.page == SET_TEMP_CAL_PAGE)
+			{
+				// 设置温度校准
+				if (sFWS2_t.set_cal == SET_CAL)
+				{
+					EVENT = SET_CAL_TEMP_REDUCE_FIVE;
+				}
+			}
+			else if (sFWS2_t.page == SET_SLEEP_PAGE)
+			{
+				// 设置睡眠时间
+				if (sFWS2_t.set_sleep == SET_SLEEP)
+				{
+					EVENT = SET_SLEEP_TIME_REDUCE_FIVE;
+				}
+			}
+			break;
+		}
+		}
+	}
+	if (key_event[2] != KEY_NONE)
+	{
+		switch (key_event[2])
+		{
+		case KEY_SHORT_PRESS:
+			EVENT = GET_CHANNEL_1;
+			sbeep.status = BEEP_SHORT;
+			break;
+		case KEY_LONG_PRESS:
+			if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245 || sFWS2_t.page == CURVE_PAGE)
+			{
+				EVENT = SET_CHANNEL_1;
+			}
+			sbeep.status = BEEP_LONG;
+			break;
+		default:
+			break;
+		}
+	}
+	if (key_event[3] != KEY_NONE)
+	{
+		switch (key_event[3])
+		{
+		case KEY_SHORT_PRESS:
+			EVENT = GET_CHANNEL_2;
+			sbeep.status = BEEP_SHORT;
+			break;
+		case KEY_LONG_PRESS:
+			if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245 || sFWS2_t.page == CURVE_PAGE)
+			{
+				EVENT = SET_CHANNEL_2;
+			}
+			sbeep.status = BEEP_LONG;
+			break;
+		default:
+			break;
+		}
+	}
+	if (key_event[4] != KEY_NONE)
+	{
+		switch (key_event[4])
+		{
+		case KEY_SHORT_PRESS:
+			EVENT = GET_CHANNEL_3;
+			sbeep.status = BEEP_SHORT;
+			break;
+		case KEY_LONG_PRESS:
+			if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245 || sFWS2_t.page == CURVE_PAGE)
+			{
+				EVENT = SET_CHANNEL_3;
+			}
+			sbeep.status = BEEP_LONG;
+			break;
+		default:
+			break;
+		}
+	}
+	if (key_event[5] != KEY_NONE)
+	{
+		switch (key_event[5])
+		{
+		case KEY_SHORT_PRESS:
 			if (sFWS2_t.page != WORK_PAGE_210 &&
 				sFWS2_t.page != WORK_PAGE_245 &&
 				sFWS2_t.page != CURVE_PAGE)
@@ -372,6 +400,9 @@ void KeyProc(void)
 					break;
 				case SELECT_SET_OTA_PAGE:
 					sFWS2_t.page = SET_OTA_PAGE;
+					break;
+				case SELECT_SET_SUPPORT_PAGE:
+					sFWS2_t.page = SET_SUPPORT_PAGE;
 					break;
 				case SELECT_EXIT_MENU_PAGE:
 					if (sFWS2_t.work_mode == WORK_NORMAL)
@@ -447,7 +478,7 @@ void KeyProc(void)
 					break;
 				case SET_SPEAK_PAGE:
 					sFWS2_t.page = SELECT_SET_SPEAK_PAGE;
-					sFWS2_t.set_speak = sFWS2_t.general_parameter.speak_state ;
+					sFWS2_t.set_speak = sFWS2_t.general_parameter.speak_state;
 					if (sFWS2_t.set_speak == SPEAKER_OPEN)
 					{
 						sFWS2_t.general_parameter.speak_state = SPEAKER_OPEN;
@@ -469,6 +500,7 @@ void KeyProc(void)
 					}
 					break;
 				case SET_SLEEP_PAGE:
+					sFWS2_t.base.last_set_sleep_time = RESET_VALUE;
 					if (sFWS2_t.set_sleep == SET_RETURN_SLEEP)
 					{
 						sFWS2_t.page = SELECT_SET_SLEEP_PAGE;
@@ -502,98 +534,64 @@ void KeyProc(void)
 				case SET_OTA_PAGE:
 					sFWS2_t.page = SELECT_SET_OTA_PAGE;
 					break;
+				case SET_SUPPORT_PAGE:
+					sFWS2_t.page = SELECT_SET_SUPPORT_PAGE;
+					break;
 				default:
 					break;
 				}
 			}
-			set_done = true;
 			sbeep.status = BEEP_SHORT;
-		}
-		/* key long perss */
-		if (key_set == KE_LONG_PRESS)
-		{
+			break;
+		case KEY_LONG_PRESS:
 			if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245 || sFWS2_t.page == CURVE_PAGE)
 			{
 				EVENT = ENTER_MENU;
 			}
-
-			sbeep.status = BEEP_LONG;
-			set_done = TRUE;
-		}
-		else if (key_ch1 == KE_LONG_PRESS)
-		{
-			if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245 || sFWS2_t.page == CURVE_PAGE)
+			else if (sFWS2_t.page != WORK_PAGE_210 || sFWS2_t.page != WORK_PAGE_245 || sFWS2_t.page != CURVE_PAGE)
 			{
-				EVENT = SET_CHANNEL_1;
+				EVENT = EXIT_MENU;
 			}
 			sbeep.status = BEEP_LONG;
-			set_done = TRUE;
-		}
-		else if (key_ch2 == KE_LONG_PRESS)
-		{
+			break;
+		case KEY_DOUBLE_CLICK:
 			if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245 || sFWS2_t.page == CURVE_PAGE)
 			{
-				EVENT = SET_CHANNEL_2;
+				if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245)
+				{
+					sFWS2_t.page = CURVE_PAGE;
+					sFWS2_t.work_mode = WORK_CURVE;
+					sFWS2_t.set_work_mode = sFWS2_t.work_mode;
+				}
+				else if (sFWS2_t.page == CURVE_PAGE)
+				{
+					if (sFWS2_t.Direct_handle_Heating_stick == HANDLE_210)
+					{
+						sFWS2_t.page = WORK_PAGE_210;
+					}
+					else if (sFWS2_t.Direct_handle_Heating_stick == HANDLE_245)
+					{
+						sFWS2_t.page = WORK_PAGE_245;
+					}
+					sFWS2_t.work_mode = WORK_NORMAL;
+					sFWS2_t.set_work_mode = sFWS2_t.work_mode;
+				}
 			}
-			sbeep.status = BEEP_LONG;
-			set_done = TRUE;
+			break;
+		default:
+			break;
 		}
-		else if (key_ch3 == KE_LONG_PRESS)
+	}
+	if (key_event[6] != KEY_NONE)
+	{
+		switch (key_event[6])
 		{
-			if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245 || sFWS2_t.page == CURVE_PAGE)
-			{
-				EVENT = SET_CHANNEL_3;
-			}
-			sbeep.status = BEEP_LONG;
-			set_done = TRUE;
-		}
-		else if (key_down == KE_LONG_PRESS)
-		{
-			if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245 || sFWS2_t.page == CURVE_PAGE)
-			{
-				// 减少温度
-				EVENT = TEMP_REDUCE_FIVE;
-			}
-			else if (sFWS2_t.page == SET_TEMP_CAL_PAGE)
-			{
-				// 设置温度校准
-				if (sFWS2_t.set_cal == SET_CAL)
-				{
-					EVENT = SET_CAL_TEMP_REDUCE_FIVE;
-				}
-			}
-			else if (sFWS2_t.page == SET_SLEEP_PAGE)
-			{
-				// 设置睡眠时间
-				if (sFWS2_t.set_sleep == SET_SLEEP)
-				{
-					EVENT = SET_SLEEP_TIME_REDUCE_FIVE;
-				}
-			}
-		}
-		else if (key_up == KE_LONG_PRESS)
-		{
-			if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245 || sFWS2_t.page == CURVE_PAGE)
-			{
-				// 减少温度
-				EVENT = TEMP_ADD_FIVE;
-			}
-			else if (sFWS2_t.page == SET_TEMP_CAL_PAGE)
-			{
-				// 设置温度校准
-				if (sFWS2_t.set_cal == SET_CAL)
-				{
-					EVENT = SET_CAL_TEMP_ADD_FIVE;
-				}
-			}
-			else if (sFWS2_t.page == SET_SLEEP_PAGE)
-			{
-				// 设置睡眠时间
-				if (sFWS2_t.set_sleep == SET_SLEEP)
-				{
-					EVENT = SET_SLEEP_TIME_ADD_FIVE;
-				}
-			}
+		case KEY_SHORT_PRESS:
+			EVENT = CHANGE_CH;
+			sbeep.status = BEEP_SHORT;
+			break;
+		default:
+			break;
 		}
 	}
 }
@@ -656,23 +654,65 @@ static void key_event_handle(void)
 			sFWS2_t.base.set_temp_f_display = 9 * sFWS2_t.general_parameter.ch1_set_temp / 5 + 32;
 		}
 		sFWS2_t.general_parameter.ch = 1;
+		PID_Clear(&pid_210);
+		PID_Clear(&pid_245);
+		EVENT = END_EVENT;
 		break;
 	case GET_CHANNEL_2:
+
 		sFWS2_t.base.set_temp = sFWS2_t.general_parameter.ch2_set_temp;
 		if (sFWS2_t.general_parameter.temp_unit == FAHRENHEIT)
 		{ // 华氏度
 			sFWS2_t.base.set_temp_f_display = 9 * sFWS2_t.general_parameter.ch2_set_temp / 5 + 32;
 		}
 		sFWS2_t.general_parameter.ch = 2;
+		PID_Clear(&pid_210);
+		PID_Clear(&pid_245);
+		EVENT = END_EVENT;
 		break;
 	case GET_CHANNEL_3:
+
 		sFWS2_t.base.set_temp = sFWS2_t.general_parameter.ch3_set_temp;
 		if (sFWS2_t.general_parameter.temp_unit == FAHRENHEIT)
 		{ // 华氏度
 			sFWS2_t.base.set_temp_f_display = 9 * sFWS2_t.general_parameter.ch3_set_temp / 5 + 32;
 		}
 		sFWS2_t.general_parameter.ch = 3;
-
+		PID_Clear(&pid_210);
+		PID_Clear(&pid_245);
+		EVENT = END_EVENT;
+		break;
+	case CHANGE_CH:
+		sFWS2_t.general_parameter.ch++;
+		if (sFWS2_t.general_parameter.ch > 3)
+			sFWS2_t.general_parameter.ch = 1;
+		if (sFWS2_t.general_parameter.ch == 1)
+		{
+			sFWS2_t.base.set_temp = sFWS2_t.general_parameter.ch1_set_temp;
+			if (sFWS2_t.general_parameter.temp_unit == FAHRENHEIT)
+			{ // 华氏度
+				sFWS2_t.base.set_temp_f_display = 9 * sFWS2_t.general_parameter.ch1_set_temp / 5 + 32;
+			}
+		}
+		else if (sFWS2_t.general_parameter.ch == 2)
+		{
+			sFWS2_t.base.set_temp = sFWS2_t.general_parameter.ch2_set_temp;
+			if (sFWS2_t.general_parameter.temp_unit == FAHRENHEIT)
+			{ // 华氏度
+				sFWS2_t.base.set_temp_f_display = 9 * sFWS2_t.general_parameter.ch2_set_temp / 5 + 32;
+			}
+		}
+		else if (sFWS2_t.general_parameter.ch == 3)
+		{
+			sFWS2_t.base.set_temp = sFWS2_t.general_parameter.ch3_set_temp;
+			if (sFWS2_t.general_parameter.temp_unit == FAHRENHEIT)
+			{ // 华氏度
+				sFWS2_t.base.set_temp_f_display = 9 * sFWS2_t.general_parameter.ch3_set_temp / 5 + 32;
+			}
+		}
+		PID_Clear(&pid_210);
+		PID_Clear(&pid_245);
+		EVENT = END_EVENT;
 		break;
 	case SET_CHANNEL_3:
 		if (sFWS2_t.general_parameter.temp_unit == CELSIUS)
@@ -708,6 +748,8 @@ static void key_event_handle(void)
 		EVENT = END_EVENT;
 		break;
 	case TEMP_ADD:
+		PID_Clear_I(&pid_210);
+		PID_Clear_I(&pid_245);
 		if (sFWS2_t.general_parameter.temp_unit == CELSIUS) // 摄氏度
 		{
 			if (sFWS2_t.base.set_temp >= MAX_SET_TEMP_VAL)
@@ -718,6 +760,7 @@ static void key_event_handle(void)
 			{
 				sFWS2_t.base.set_temp++;
 			}
+			sFWS2_t.base.set_temp_f_display = 9 * sFWS2_t.base.set_temp / 5 + 32;
 		}
 		else if (sFWS2_t.general_parameter.temp_unit == FAHRENHEIT) // 华氏度
 		{
@@ -729,6 +772,7 @@ static void key_event_handle(void)
 			{
 				sFWS2_t.base.set_temp_f_display++;
 			}
+			sFWS2_t.base.set_temp = (sFWS2_t.base.set_temp_f_display - 32) * 5 / 9;
 		}
 
 		sbeep.status = BEEP_SHORT;
@@ -736,34 +780,47 @@ static void key_event_handle(void)
 		break;
 
 	case TEMP_ADD_FIVE:
-		if (sFWS2_t.general_parameter.temp_unit == CELSIUS)
+		PID_Clear_I(&pid_210);
+		PID_Clear_I(&pid_245);
+		delay_time--;
+		if (delay_time <= 0)
 		{
-			if (sFWS2_t.base.set_temp >= MAX_SET_TEMP_VAL - 5)
+			delay_time = KEY_LONG_PRESS_TIME;
+			PID_Clear_I(&pid_210);
+			PID_Clear_I(&pid_245);
+			if (sFWS2_t.general_parameter.temp_unit == CELSIUS)
 			{
-				sFWS2_t.base.set_temp = MAX_SET_TEMP_VAL;
+				if (sFWS2_t.base.set_temp >= MAX_SET_TEMP_VAL - 5)
+				{
+					sFWS2_t.base.set_temp = MAX_SET_TEMP_VAL;
+				}
+				else
+				{
+					sFWS2_t.base.set_temp += 5;
+				}
+				sFWS2_t.base.set_temp_f_display = 9 * sFWS2_t.base.set_temp / 5 + 32;
 			}
-			else
+			else if (sFWS2_t.general_parameter.temp_unit == FAHRENHEIT)
 			{
-				sFWS2_t.base.set_temp += 5;
+				if (sFWS2_t.base.set_temp_f_display >= 842)
+				{
+					sFWS2_t.base.set_temp_f_display = 842;
+				}
+				else
+				{
+					sFWS2_t.base.set_temp_f_display += 41;
+				}
+				sFWS2_t.base.set_temp = (sFWS2_t.base.set_temp_f_display - 32) * 5 / 9;
 			}
+			sFWS2_t.general_parameter.ch = 0;
+			sbeep.status = BEEP_SHORT;
 		}
-		else if (sFWS2_t.general_parameter.temp_unit == FAHRENHEIT)
-		{
-			if (sFWS2_t.base.set_temp_f_display >= 842)
-			{
-				sFWS2_t.base.set_temp_f_display = 842;
-			}
-			else
-			{
-				sFWS2_t.base.set_temp_f_display += 5;
-			}
-		}
-		sFWS2_t.general_parameter.ch = 0;
-		sbeep.status = BEEP_SHORT;
 		EVENT = END_EVENT;
 		break;
 
 	case TEMP_REDUCE:
+		PID_Clear_I(&pid_210);
+		PID_Clear_I(&pid_245);
 		if (sFWS2_t.general_parameter.temp_unit == CELSIUS)
 		{
 			if (sFWS2_t.base.set_temp <= MIN_SET_TEMP_VAL)
@@ -774,6 +831,7 @@ static void key_event_handle(void)
 			{
 				sFWS2_t.base.set_temp--;
 			}
+			sFWS2_t.base.set_temp_f_display = 9 * sFWS2_t.base.set_temp / 5 + 32;
 		}
 		else if (sFWS2_t.general_parameter.temp_unit == FAHRENHEIT)
 		{
@@ -785,6 +843,7 @@ static void key_event_handle(void)
 			{
 				sFWS2_t.base.set_temp_f_display--;
 			}
+			sFWS2_t.base.set_temp = (sFWS2_t.base.set_temp_f_display - 32) * 5 / 9;
 		}
 		sFWS2_t.general_parameter.ch = 0;
 		sbeep.status = BEEP_SHORT;
@@ -792,30 +851,38 @@ static void key_event_handle(void)
 		break;
 
 	case TEMP_REDUCE_FIVE:
-		if (sFWS2_t.general_parameter.temp_unit == CELSIUS)
+		delay_time--;
+		if (delay_time <= 0)
 		{
-			if (sFWS2_t.base.set_temp <= MIN_SET_TEMP_VAL + 5)
+			delay_time = KEY_LONG_PRESS_TIME;
+			PID_Clear_I(&pid_210);
+			PID_Clear_I(&pid_245);
+			if (sFWS2_t.general_parameter.temp_unit == CELSIUS)
 			{
-				sFWS2_t.base.set_temp = MIN_SET_TEMP_VAL;
+				if (sFWS2_t.base.set_temp <= MIN_SET_TEMP_VAL + 5)
+				{
+					sFWS2_t.base.set_temp = MIN_SET_TEMP_VAL;
+				}
+				else
+				{
+					sFWS2_t.base.set_temp -= 5;
+				}
+				sFWS2_t.base.set_temp_f_display = 9 * sFWS2_t.base.set_temp / 5 + 32;
 			}
-			else
+			else if (sFWS2_t.general_parameter.temp_unit == FAHRENHEIT)
 			{
-				sFWS2_t.base.set_temp -= 5;
+				if (sFWS2_t.base.set_temp_f_display <= 392)
+				{
+					sFWS2_t.base.set_temp_f_display = 392;
+				}
+				else
+				{
+					sFWS2_t.base.set_temp_f_display -= 41;
+				}
+				sFWS2_t.base.set_temp = (sFWS2_t.base.set_temp_f_display - 32) * 5 / 9;
 			}
+			sbeep.status = BEEP_SHORT;
 		}
-		else if (sFWS2_t.general_parameter.temp_unit == FAHRENHEIT)
-		{
-			if (sFWS2_t.base.set_temp_f_display <= 392)
-			{
-				sFWS2_t.base.set_temp_f_display = 392;
-			}
-			else
-			{
-				sFWS2_t.base.set_temp_f_display -= 5;
-			}
-		}
-
-		sbeep.status = BEEP_SHORT;
 		EVENT = END_EVENT;
 		break;
 	case SET_WORK_MODE:
@@ -932,7 +999,6 @@ static void key_event_handle(void)
 
 		EVENT = END_EVENT;
 		break;
-
 	case SET_CAL_TEMP_ADD_FIVE:
 		delay_time--;
 		if (delay_time <= 0)
@@ -967,7 +1033,6 @@ static void key_event_handle(void)
 				sFWS2_t.base.cal_temp_c_display = (sFWS2_t.base.cal_temp_f_display - 32) * 5 / 9;
 			}
 		}
-
 		EVENT = END_EVENT;
 		break;
 
@@ -1013,11 +1078,10 @@ static void key_event_handle(void)
 		{
 			sFWS2_t.base.set_sleep_time = MAX_SLEEP_TIME;
 		}
-		else
+		else 
 		{
 			sFWS2_t.base.set_sleep_time++;
 		}
-
 		sFWS2_t.base.sleep_time_count = sFWS2_t.base.set_sleep_time;
 		EVENT = END_EVENT;
 		break;
@@ -1030,18 +1094,15 @@ static void key_event_handle(void)
 		{
 			sFWS2_t.base.set_sleep_time--;
 		}
-
 		sFWS2_t.base.sleep_time_count = sFWS2_t.base.set_sleep_time;
 		EVENT = END_EVENT;
 		break;
 	case SET_SLEEP_TIME_ADD_FIVE:
 		delay_time--;
-
 		if (delay_time <= 0)
 		{
 			delay_time = KEY_LONG_PRESS_TIME;
 			sbeep.status = BEEP_SHORT;
-
 			if (sFWS2_t.base.set_sleep_time >= MAX_SLEEP_TIME - 5)
 			{
 				sFWS2_t.base.set_sleep_time = MAX_SLEEP_TIME;
@@ -1051,18 +1112,15 @@ static void key_event_handle(void)
 				sFWS2_t.base.set_sleep_time += 5;
 			}
 		}
-
 		sFWS2_t.base.sleep_time_count = sFWS2_t.base.set_sleep_time;
 		EVENT = END_EVENT;
 		break;
 	case SET_SLEEP_TIME_REDUCE_FIVE:
 		delay_time--;
-
 		if (delay_time <= 0)
 		{
 			delay_time = KEY_LONG_PRESS_TIME;
 			sbeep.status = BEEP_SHORT;
-
 			if (sFWS2_t.base.set_sleep_time <= MIN_SLEEP_TIME + 5)
 			{
 				sFWS2_t.base.set_sleep_time = MIN_SLEEP_TIME;
@@ -1072,31 +1130,27 @@ static void key_event_handle(void)
 				sFWS2_t.base.set_sleep_time -= 5;
 			}
 		}
-
 		sFWS2_t.base.sleep_time_count = sFWS2_t.base.set_sleep_time;
 		EVENT = END_EVENT;
 		break;
-
 	case SET_RESET:
 		sFWS2_t.reset_flag = true;
-        /* reset value */
-        /* reset handle data */
-        sFWS2_t.base.set_temp = 340;
-        sFWS2_t.base.cal_data = 0;
-        sFWS2_t.general_parameter.ch1_set_temp = 280;
-        sFWS2_t.general_parameter.ch2_set_temp = 320;
-        sFWS2_t.general_parameter.ch3_set_temp = 360;
-        sFWS2_t.base.set_sleep_time = 0;
-
-        /* reset function data */
-        sFWS2_t.general_parameter.temp_unit = CELSIUS;
-        sFWS2_t.general_parameter.speak_state = SPEAKER_OPEN;
-        sFWS2_t.general_parameter.display_lock_state = LOCK;
-        /* reset other data */
-        sFWS2_t.work_mode = WORK_NORMAL;
-        EVENT = END_EVENT;
+		/* reset value */
+		/* reset handle data */
+		sFWS2_t.base.set_temp = 340;
+		sFWS2_t.base.cal_data = 0;
+		sFWS2_t.general_parameter.ch1_set_temp = 280;
+		sFWS2_t.general_parameter.ch2_set_temp = 320;
+		sFWS2_t.general_parameter.ch3_set_temp = 360;
+		sFWS2_t.base.set_sleep_time = 0;
+		/* reset function data */
+		sFWS2_t.general_parameter.temp_unit = CELSIUS;	
+		sFWS2_t.general_parameter.speak_state = SPEAKER_OPEN;
+		sFWS2_t.general_parameter.display_lock_state = LOCK;
+		/* reset other data */
+		sFWS2_t.work_mode = WORK_NORMAL;
+		EVENT = END_EVENT;
 		break;
-
 	case END_EVENT:
 		break;
 	}
@@ -1108,12 +1162,12 @@ void key_handle(void)
 	static uint8_t set_done = FALSE;
 #if 1
 
-	if (get_key_up() == K_PRESS ||
-		get_key_down() == K_PRESS ||
-		get_key_ch1() == K_PRESS ||
-		get_key_ch2() == K_PRESS ||
-		get_key_ch3() == K_PRESS ||
-		get_key_set() == K_PRESS)
+	if (key_event[0] != KEY_NONE ||
+		key_event[1] != KEY_NONE ||
+		key_event[2] != KEY_NONE ||
+		key_event[3] != KEY_NONE ||
+		key_event[4] != KEY_NONE ||
+		key_event[5] != KEY_NONE)
 	{
 		if (sFWS2_t.Direct_handle_state == HANDLE_SLEEP)
 		{
@@ -1124,8 +1178,7 @@ void key_handle(void)
 			sFWS2_t.base.waken_time_count = 0;
 		}
 	}
-
 #endif
-	KeyProc();
+	handle_key_events();
 	key_event_handle();
 }

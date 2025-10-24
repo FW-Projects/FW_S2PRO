@@ -19,6 +19,7 @@
         "c_lib.h": "c",
         "lcd.h": "c",
         "stdint.h": "c",
-        "lcd_init.h": "c"
+        "lcd_init.h": "c",
+        "key_handle.h": "c"
     }
 }

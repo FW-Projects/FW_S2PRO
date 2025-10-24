@@ -20,13 +20,17 @@
 #define MAX_SLEEP_TIME 999
 #define MIN_SLEEP_TIME 0
 
+#define MAX_MAX_ACTUAL_TEMP 700
 #define MAX_ACTUAL_TEMP 550
 #define MIN_ACTUAL_TEMP 60
 #define ERROR_TIME 10
 
+#define OVER_CURRENT_DATA 800
+
+
 #define RESET_VALUE 255
 
-#define KEY_LONG_PRESS_TIME 5
+#define KEY_LONG_PRESS_TIME 10
 
 // #define OVER_TEMP_VAL 505
 // #define LOW_TEMP_VAL 65
@@ -61,9 +65,9 @@
 #define REDUCE_HOT 1
 #define PID_HOT 2
 
-#define ACTUAL_TEMP_REFRESH_TIME 100
+#define ACTUAL_TEMP_REFRESH_TIME 50
 
-#define POWER_BAR_REFRESH_TIME 20
+#define POWER_BAR_REFRESH_TIME 100
 
 #define SET_TEMP_TIME 100
 
@@ -83,21 +87,23 @@
 #define SELECT_SET_RESET_PICTURE 10
 #define SELECT_SET_VERSION_PICTURE 11
 #define SELECT_SET_OTA_PICTURE 12
-#define SELECT_EXIT_MENU_PICTURE 13
-#define CURVE_PICTURE 14
-#define SET_WORK_PICTURE 15
-#define SET_UNIT_PICTURE 16
-#define SET_TEMP_CAL_PICTURE 17
-#define SET_SPEAK_PICTURE 18
-#define SET_TEMP_LOCK_PICTURE 19
-#define SET_SLEEP_PICTURE 20
-#define SET_RESET_PICTURE 21
-#define SET_RESET_DONE_PICTURE 22
-#define SET_VERSION_PICTURE 23
-#define SET_OTA_PICTURE 24
+#define SELECT_SET_SUPPORT_PICTURE 13
+#define SELECT_EXIT_MENU_PICTURE 14
+#define CURVE_PICTURE 15
+#define SET_WORK_PICTURE 16
+#define SET_UNIT_PICTURE 17
+#define SET_TEMP_CAL_PICTURE 18
+#define SET_SPEAK_PICTURE 19
+#define SET_TEMP_LOCK_PICTURE 20
+#define SET_SLEEP_PICTURE 21
+#define SET_RESET_PICTURE 22
+#define SET_RESET_DONE_PICTURE 23
+#define SET_VERSION_PICTURE 24
+#define SET_OTA_PICTURE 25
+#define SET_SUPPORT_PICTURE 26
 /* some icons */
-#define UNSELECT_CH_PICTURE 25
-#define SELECT_CH_PICTURE 26
+//#define UNSELECT_CH_PICTURE 27
+//#define SELECT_CH_PICTURE 28
 #define MENU_CELSIUS_ICON_PICTURE 27
 #define MENU_FAHRENHEIT_ICON_PICTURE 28
 #define SLEEP_STATE_PICTURE 29
@@ -119,8 +125,14 @@
 #define MAIN_CELSIUS_ICON_PICTURE 45
 #define MAIN_FAHRENHEIT_ICON_PICTURE 46
 #define SLIDER_ICON_PICTURE 47
-#define CURVE_GRID_PICTURE 48
-#define NAVIGATION_BAR_PICTURE 49
+#define NAVIGATION_BAR_PICTURE 48
+#define UNSELECT_CH1_PICTURE 49
+#define UNSELECT_CH2_PICTURE 50
+#define UNSELECT_CH3_PICTURE 51
+#define SELECT_CH1_PICTURE 52
+#define SELECT_CH2_PICTURE 53
+#define SELECT_CH3_PICTURE 54
+#define HANDLE_ABNORMAL_PICTURE 55
 
 typedef enum
 {
@@ -135,6 +147,7 @@ typedef enum
     HANDLE_FAN_ERR,
     HANDLE_LOW_TEMP_ERR,
     HANDLE_OVER_TEMP_ERR,
+	HANDLE_OVER_CURRENT,
     HANDLE_NO_ERR,
 } handle_error_state_e;
 
@@ -162,6 +175,7 @@ typedef enum
     HANDLE_SLEEP = 0,
     HANDLE_WORKING,
     HANDLE_WAKEN,
+	HANDLE_RPC,
 } handle_state_e;
 
 #define ABNORMAL 0
@@ -251,7 +265,7 @@ typedef struct
     float last_cal_temp_c_display;
     float cal_temp_f_display;
     float last_cal_temp_f_display;
-
+	float current_data;
     float pwm_out;
 
     float set_sleep_time;
@@ -260,8 +274,8 @@ typedef struct
     float waken_time_count;
     uint16_t error_time;
     handle_state_e last_state;
-	bool run_disp_state;
-	bool last_run_disp_state;
+    bool run_disp_state;
+    bool last_run_disp_state;
     float last_power_data;
 
     uint8_t temp_buff[CURVE_BUFF_SIZE];
@@ -282,6 +296,7 @@ typedef enum
     SELECT_SET_RESET_PAGE,
     SELECT_SET_VERSION_PAGE,
     SELECT_SET_OTA_PAGE,
+	SELECT_SET_SUPPORT_PAGE,
     SELECT_EXIT_MENU_PAGE,
     CURVE_PAGE,
     SET_WORK_PAGE,
@@ -294,9 +309,8 @@ typedef enum
     SET_RESET_DONE_PAGE,
     SET_VERSION_PAGE,
     SET_OTA_PAGE,
+	SET_SUPPORT_PAGE,
     /* some icons */
-    UNSELECT_CH,           /* 57*31 */
-    SELECT_CH,             /* 57*31 */
     MENU_CELSIUS_ICON,     /* 18*18 */
     MENU_FAHRENHEIT_ICON,  /* 18*18 */
     SLEEP_STATE,           /* 132*114 */
@@ -311,7 +325,6 @@ typedef enum
     UN_EXIT_ICON,          /* 88*34 */
     EXIT_ICON,             /* 88*34 */
     HANDLE_NOT_EXIST_ICON, /* 139*118 */
-
     SLEEP_ICON,
     SELECT_ICON,
     UN_SELECT_ICON,
@@ -319,6 +332,14 @@ typedef enum
     MAIN_CELSIUS_ICON,
     MAIN_FAHRENHEIT_ICON,
     SLIDER_ICON,
+	NAVIGATION_BAR,
+	UNSELECT_CH1, 
+	UNSELECT_CH2, 
+	UNSELECT_CH3, 
+	SELECT_CH1, 
+	SELECT_CH2, 
+	SELECT_CH3, 
+	HANDLE_ABNORMAL,
 } page_e;
 
 typedef struct
@@ -332,11 +353,9 @@ typedef struct
     fws2_ota_state_e ota_state;
     fws2_uart_state_e uart_state;
 
-
     uint8_t ch;
     uint8_t last_ch;
     uint8_t save_ch;
-
 
     /* ch set */
     float ch1_set_temp;
@@ -355,7 +374,6 @@ typedef struct
     uint8_t last_Heating_stick;
 
 } general_parameter_t;
-
 
 typedef struct
 {
@@ -388,7 +406,7 @@ typedef struct
     page_e last_page;
 
     bool reset_flag;
-	bool init_flag;
+    bool init_flag;
 
 } FWS2_Handle;
 

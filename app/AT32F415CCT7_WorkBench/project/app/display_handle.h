@@ -5,6 +5,7 @@
 #include "at32_spiflash.h"
 
 #define DISPLAY_TASK_TIME 1
+extern int8_t actual_refesh_time;
 
 typedef struct
 {

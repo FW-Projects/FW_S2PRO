@@ -1,27 +1,27 @@
 /* add user code begin Header */
 /**
-  **************************************************************************
-  * @file     main.c
-  * @brief    main program
-  **************************************************************************
-  *                       Copyright notice & Disclaimer
-  *
-  * The software Board Support Package (BSP) that is made available to
-  * download from Artery official website is the copyrighted work of Artery.
-  * Artery authorizes customers to use, copy, and distribute the BSP
-  * software and its related documentation for the purpose of design and
-  * development in conjunction with Artery microcontrollers. Use of the
-  * software is governed by this copyright notice and the following disclaimer.
-  *
-  * THIS SOFTWARE IS PROVIDED ON "AS IS" BASIS WITHOUT WARRANTIES,
-  * GUARANTEES OR REPRESENTATIONS OF ANY KIND. ARTERY EXPRESSLY DISCLAIMS,
-  * TO THE FULLEST EXTENT PERMITTED BY LAW, ALL EXPRESS, IMPLIED OR
-  * STATUTORY OR OTHER WARRANTIES, GUARANTEES OR REPRESENTATIONS,
-  * INCLUDING BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY,
-  * FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.
-  *
-  **************************************************************************
-  */
+ **************************************************************************
+ * @file     main.c
+ * @brief    main program
+ **************************************************************************
+ *                       Copyright notice & Disclaimer
+ *
+ * The software Board Support Package (BSP) that is made available to
+ * download from Artery official website is the copyrighted work of Artery.
+ * Artery authorizes customers to use, copy, and distribute the BSP
+ * software and its related documentation for the purpose of design and
+ * development in conjunction with Artery microcontrollers. Use of the
+ * software is governed by this copyright notice and the following disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED ON "AS IS" BASIS WITHOUT WARRANTIES,
+ * GUARANTEES OR REPRESENTATIONS OF ANY KIND. ARTERY EXPRESSLY DISCLAIMS,
+ * TO THE FULLEST EXTENT PERMITTED BY LAW, ALL EXPRESS, IMPLIED OR
+ * STATUTORY OR OTHER WARRANTIES, GUARANTEES OR REPRESENTATIONS,
+ * INCLUDING BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.
+ *
+ **************************************************************************
+ */
 /* add user code end Header */
 
 /* Includes ------------------------------------------------------------------*/
@@ -106,7 +106,7 @@ void output_task(void);
 int main(void)
 {
   /* add user code begin 1 */
-	nvic_vector_table_set(NVIC_VECTTAB_FLASH, 0x4000);
+  nvic_vector_table_set(NVIC_VECTTAB_FLASH, 0x4000);
   /* add user code end 1 */
 
   /* system clock config. */
@@ -159,33 +159,34 @@ int main(void)
   wk_wdt_init();
 
   /* add user code begin 2 */
-	tmt_init();
-	tmt.create(feed_dog_task, FEED_DOG_TIME);
-//	tmt.create(beep_task, BEEP_HANDLE_TIME);
-//	tmt.create(key_task, KEY_HANDLE_TIME);
-	tmt.create(iap_task, IAP_HANDLE_TIME);
-	tmt.create(flash_task, FLASH_HANDLE_TIME);
-	tmt.create(disp_task, DISPLAY_TASK_TIME);
-	tmt.create(pc_task, PC_HANDLE_TIME);
-	tmt.create(output_task,OUTPUT_HANDLE_TIME);
-	filter_init(&s1_adc, ADC_CHANNEL_1);
-	BSP_UsartInit();
-	PID_Init(&pid_210, 50, 0.05, 5, 3333);
-    PID_Init(&pid_245, 30, 0.1, 10, 10000);
-	gpio_bits_set(GPIOB, GPIO_PINS_11); // LCD_OPEN
-	LCD_Init();
-	LCD_Clear(BLACK);
-	TranferPicturetoTFT_LCD(0, 0, 320, 240, LOGO_PICTURE);
-	FWS2_Init(&sFWS2_t);
-	init_cycle_counter(true);
-	EventRecorderInitialize(0, 1);
-	delay_ms(3000);
+  tmt_init();
+  tmt.create(feed_dog_task, FEED_DOG_TIME);
+  tmt.create(iap_task, IAP_HANDLE_TIME);
+  tmt.create(flash_task, FLASH_HANDLE_TIME);
+  tmt.create(disp_task, DISPLAY_TASK_TIME);
+  tmt.create(pc_task, PC_HANDLE_TIME);
+  tmt.create(output_task, OUTPUT_HANDLE_TIME);
+  filter_init(&s1_adc, ADC_CHANNEL_1);
+  filter_init(&s1_current, ADC_CHANNEL_8);
+  BSP_UsartInit();
+  PID_Init(&pid_210, 50, 0.1, 10, 3333);
+//  PID_Init(&pid_210, 50, 0.2, 10, 3333);
+  PID_Init(&pid_245, 100, 0.4, 10, 10000);
+  gpio_bits_set(GPIOB, GPIO_PINS_11); // LCD_OPEN
+  LCD_Init();                                                                                                                                                                                                                          
+  LCD_Clear(BLACK);
+  TranferPicturetoTFT_LCD(0, 0, 320, 240, LOGO_PICTURE);
+  TranferPicturetoTFT_LCD(0, 0, 320, 240, LOGO_PICTURE);
+  FWS2_Init(&sFWS2_t);
+  init_cycle_counter(true);
+  EventRecorderInitialize(0, 1);
+  delay_ms(3000);
   /* add user code end 2 */
 
   while(1)
   {
     /* add user code begin 3 */
-	tmt.run();
+    tmt.run();
     /* add user code end 3 */
   }
 }
@@ -208,8 +209,8 @@ void iap_task(void)
  */
 void disp_task(void)
 {
-//	if (sFWS2_t.init_flag)
-		display_handle();
+  //	if (sFWS2_t.init_flag)
+  display_handle();
 }
 
 /**
@@ -219,10 +220,8 @@ void disp_task(void)
  */
 void output_task(void)
 {
-	output_handle();
+  output_handle();
 }
-
-
 
 /**
   * @brief  beep task function
@@ -232,9 +231,9 @@ void output_task(void)
   */
 void beep_task(void)
 {
-    beep_handle();
+  beep_handle();
 }
-   
+
 /**
  * @brief  key task function
  * @param  none
@@ -246,7 +245,7 @@ void key_task(void)
   key_handle();
 #endif
 }
-  
+
 /**
  * @brief  flash task function
  * @param  none
@@ -259,7 +258,6 @@ void flash_task(void)
 #endif
 }
 
-
 void feed_dog_task(void)
 {
   static bool first_in = false;
@@ -267,14 +265,13 @@ void feed_dog_task(void)
   {
     first_in = true;
     /* if enabled, please feed the dog through wdt_counter_reload() function */
-//	 wdt_enable();
+    //	 wdt_enable();
   }
   wdt_counter_reload();
 }
 
-
 void pc_task(void)
 {
-    pc_comm_handle();
+  pc_comm_handle();
 }
-  /* add user code end 4 */
+/* add user code end 4 */

@@ -583,8 +583,9 @@ void LCD_ShowIntNum(uint16_t x, uint16_t y, uint16_t num, uint8_t len, uint16_t 
         {
             if (temp == 0)
             {
-                LCD_ShowChar(x + t * sizex, y, ' ', fc, bc, sizey, 0);
-                continue;
+//                LCD_ShowChar(x + t * sizex, y, ' ', fc, bc, sizey, 0);
+				LCD_ShowChar(x + t * sizex, y, '0' , fc, bc, sizey, 0);
+                continue; 
             }
             else
             {
@@ -595,6 +596,89 @@ void LCD_ShowIntNum(uint16_t x, uint16_t y, uint16_t num, uint8_t len, uint16_t 
         LCD_ShowChar(x + t * sizex, y, temp + 48, fc, bc, sizey, 0);
     }
 }
+void LCD_VISION(uint16_t x, uint16_t y,  uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey)
+{
+	uint8_t t, temp;
+    uint8_t enshow = 0;
+    uint8_t sizex = sizey / 2;
+
+    for (t = 0; t < len; t++)
+    {
+		switch(t)
+		{
+			case 1:
+				LCD_ShowChar(x + t * sizex, y, 'V', fc, bc, sizey, 0);
+				break;
+			case 2:
+				LCD_ShowChar(x + t * sizex, y, '1', fc, bc, sizey, 0);
+				break;
+			case 3:
+				LCD_ShowChar(x + t * sizex, y, '.', fc, bc, sizey, 0);
+				break;
+			case 4:
+				LCD_ShowChar(x + t * sizex, y, '1', fc, bc, sizey, 0);
+				break;
+			case 5:
+				LCD_ShowChar(x + t * sizex, y, '.', fc, bc, sizey, 0);
+				break;
+			case 6:
+				LCD_ShowChar(x + t * sizex, y, '0', fc, bc, sizey, 0);
+				break;
+		}
+        
+    }
+}
+void LCD_CH(uint16_t x, uint16_t y,  uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey,uint8_t in_ch)
+{
+	uint8_t t, temp;
+    uint8_t enshow = 0;
+    uint8_t sizex = sizey / 2;
+
+    for (t = 0; t < len; t++)
+    {
+		switch(t)
+		{
+			case 1:
+				LCD_ShowChar(x + t * sizex, y, 'C', fc, bc, sizey, 0);
+				break;
+			case 2:
+				LCD_ShowChar(x + t * sizex, y, 'H', fc, bc, sizey, 0);
+				break;
+			case 3:
+				if(in_ch == 1)
+					LCD_ShowChar(x + t * sizex, y, '1', fc, bc, sizey, 0);
+				else if(in_ch == 2)
+					LCD_ShowChar(x + t * sizex, y, '2', fc, bc, sizey, 0);
+				else if(in_ch == 3)
+					LCD_ShowChar(x + t * sizex, y, '3', fc, bc, sizey, 0);
+				break;
+		}    
+    }
+}
+
+void LCD_MIN(uint16_t x, uint16_t y,  uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey)
+{
+	uint8_t t, temp;
+    uint8_t enshow = 0;
+    uint8_t sizex = sizey / 2;
+
+    for (t = 0; t < len; t++)
+    {
+		switch(t)
+		{
+			case 1:
+				LCD_ShowChar(x + t * sizex, y, 'M', fc, bc, sizey, 0);
+				break;
+			case 2:
+				LCD_ShowChar(x + t * sizex, y, 'i', fc, bc, sizey, 0);
+				break;
+			case 3:
+				LCD_ShowChar(x + t * sizex, y, 'n', fc, bc, sizey, 0);
+				break;
+		}    
+    }
+}
+
 
 void LCD_ShowFloatNum1(uint16_t x, uint16_t y, float num, uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey)
 {
@@ -840,6 +924,25 @@ void TranferPicturetoTFT_LCD(uint16_t x1, uint16_t y1, uint16_t width, uint16_t 
 	case 49:
         uiPic_Addr = PIC_ADDRESS_49;
         break;
+	case 50:
+        uiPic_Addr = PIC_ADDRESS_50;
+        break;
+	case 51:
+        uiPic_Addr = PIC_ADDRESS_51;
+        break;
+	case 52:
+        uiPic_Addr = PIC_ADDRESS_52;
+        break;
+	case 53:
+        uiPic_Addr = PIC_ADDRESS_53;
+        break;
+	case 54:
+        uiPic_Addr = PIC_ADDRESS_54;
+        break;
+	case 55:
+        uiPic_Addr = PIC_ADDRESS_55;
+        break;
+	
     }
     width = width + x1;
     height = height + y1;
@@ -1044,9 +1147,9 @@ void LCD_Show_Curve(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, float s1
 
         if (i < (CURVE_BUFF_SIZE - 2))
         {
-            LCD_DrawLine(x1 + i, sFWS2_t.base.temp_buff[i + 1], x1 + i, sFWS2_t.base.temp_buff[i + 2], 0xf460);
-//            LCD_DrawLine(x1 + i, sFWS2_t.base.power_buff[i + 1], x1 + i, sFWS2_t.base.power_buff[i + 2], 0xfe60);0x2a92
-			LCD_DrawLine(x1 + i, sFWS2_t.base.power_buff[i + 1], x1 + i, sFWS2_t.base.power_buff[i + 2], 0x0b1d);
+			LCD_DrawLine(x1 + i, sFWS2_t.base.temp_buff[i + 1], x1 + i, sFWS2_t.base.temp_buff[i + 2], 0xe428);
+			LCD_DrawLine(x1 + i, sFWS2_t.base.power_buff[i + 1], x1 + i, sFWS2_t.base.power_buff[i + 2], BLUE);
+//			LCD_DrawLine(x1 + i, sFWS2_t.base.power_buff[i + 1], x1 + i, sFWS2_t.base.power_buff[i + 2], 0x0b1d);
 
         }
 

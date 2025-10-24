@@ -17,24 +17,28 @@ Library Manager: ArmAr.exe V6.23
 Hex Converter:   FromElf.exe V6.23
 CPU DLL:         SARMCM3.DLL V5.42.0.0
 Dialog DLL:      DCM.DLL V1.17.5.0
-Target DLL:      Segger\JL2CM3.dll V2.99.45.0
+Target DLL:      CMSIS_AGDI.dll V1.33.22.0
 Dialog DLL:      TCM.DLL V1.56.6.0
  
 <h2>Project:</h2>
 D:\AT32_project\FW_S2Pro\S2Pro_415\app\AT32F415CCT7_WorkBench\project\MDK_V5\AT32F415CCT7_WorkBench.uvprojx
-Project File Date:  09/23/2025
+Project File Date:  10/22/2025
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.23', folder: 'D:\keil5.42\ARM\ARMCLANG\Bin'
 Build target 'AT32F415CCT7_WorkBench'
+compiling main.c...
+linking...
+Program Size: Code=22504 RO-data=51416 RW-data=204 ZI-data=10108  
+FromELF: creating hex file...
 After Build - User command #1: fromelf.exe --bin --output .\Listings\AT32F415CCT7_WorkBench.bin .\objects\AT32F415CCT7_WorkBench.axf
 After Build - User command #2: D:\Sonix_project\BF05-master\BF05-master\app\project\MDK_V5\keil5_disp_size_bar.exe
 ram:
   RW_IRAM1 :0x20000000
-   32.00 KB :|¡ö¡ö¡ö¡ö¡ö¡ö______________|   31.67 % (   10.13 KB /    32.00 KB) [22392 B]
+   32.00 KB :|¡ö¡ö¡ö¡ö¡ö¡ö______________|   31.47 % (   10.07 KB /    32.00 KB) [22456 B]
 flash:
   ER_IROM1 :0x8004000
-  256.00 KB :|¡ö¡ö¡ö¡ö¡ö¡ö¡ö_____________|   37.90 % (   97.03 KB /   256.00 KB) [162784 B]
+  256.00 KB :|¡ö¡ö¡ö¡ö¡ö_______________|   28.20 % (   72.19 KB /   256.00 KB) [188224 B]
 ".\objects\AT32F415CCT7_WorkBench.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
@@ -83,17 +87,17 @@ Package Vendor: GorgonMeducer
 
    * Component: ARM::CMSIS-View:Event Recorder&DAP@1.6.0
       Include file:  EventRecorder/Config/EventRecorderConf.h
-      Include file:  EventRecorder/Include/EventRecorder.h
       Source file:   EventRecorder/Source/EventRecorder.c
+      Include file:  EventRecorder/Include/EventRecorder.h
 
    * Component: ARM::CMSIS:CORE@6.1.1
 
    * Component: GorgonMeducer::Utilities:perf_counter:Core&Source@2.4.0
       Source file:   perf_counter.c
       Source file:   perfc_port_default.c
-      Include file:  perf_counter.h
       Source file:   systick_wrapper_gnu.s
-Build Time Elapsed:  00:00:00
+      Include file:  perf_counter.h
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

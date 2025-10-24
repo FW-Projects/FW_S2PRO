@@ -1,4 +1,4 @@
---cpu=Cortex-M4 --fpu=SoftVFP --lto
+--cpu=Cortex-M4 --fpu=SoftVFP
 ".\objects\main.o"
 ".\objects\at32f415_wk_config.o"
 ".\objects\at32f415_int.o"

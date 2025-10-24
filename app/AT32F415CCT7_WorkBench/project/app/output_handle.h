@@ -29,6 +29,8 @@ extern float direct_handle_pid_out;
 void pwm_control(void);
 void sleep_control(void);
 void output_handle(void);
+void rpc_control(void);
+void check_current(void);
 uint8_t linear_correction(uint16_t user_set_temp);
 
 #endif

@@ -41,7 +41,7 @@ typedef enum
 
 typedef struct
 {
-    flash_state_t state;
+	flash_state_t state;
 } flash_handle_t;
 
 void FlashProc(void);

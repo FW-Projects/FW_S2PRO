@@ -185,6 +185,7 @@ void spiflash_read(uint8_t *pbuffer, uint32_t read_addr, uint32_t length)
 /**
  * @brief  erase a sector data
  * @param  erase_addr: sector address to erase
+
  * @retval none
  */
 void spiflash_sector_erase(uint32_t erase_addr)
@@ -305,7 +306,7 @@ void spi_bytes_write(uint8_t *pbuffer, uint32_t length)
 	dma_init_struct.peripheral_base_addr = (uint32_t)(&SPIX->dt);
 	dma_init_struct.peripheral_data_width = DMA_PERIPHERAL_DATA_WIDTH_BYTE;
 	dma_init_struct.peripheral_inc_enable = FALSE;
-	dma_init_struct.priority = DMA_PRIORITY_VERY_HIGH;
+	dma_init_struct.priority = DMA_PRIORITY_LOW;
 	dma_init_struct.loop_mode_enable = FALSE;
 	dma_init(DMA_RX_CH, &dma_init_struct);
 
@@ -317,7 +318,7 @@ void spi_bytes_write(uint8_t *pbuffer, uint32_t length)
 	dma_init_struct.peripheral_base_addr = (uint32_t)(&SPIX->dt);
 	dma_init_struct.peripheral_data_width = DMA_PERIPHERAL_DATA_WIDTH_BYTE;
 	dma_init_struct.peripheral_inc_enable = FALSE;
-	dma_init_struct.priority = DMA_PRIORITY_VERY_HIGH;
+	dma_init_struct.priority = DMA_PRIORITY_LOW;
 	dma_init_struct.loop_mode_enable = FALSE;
 	dma_init(DMA_TX_CH, &dma_init_struct);
 
@@ -373,7 +374,7 @@ void spi_bytes_read(uint8_t *pbuffer, uint32_t length)
 	dma_init_struct.peripheral_base_addr = (uint32_t)(&SPIX->dt);
 	dma_init_struct.peripheral_data_width = DMA_PERIPHERAL_DATA_WIDTH_BYTE;
 	dma_init_struct.peripheral_inc_enable = FALSE;
-	dma_init_struct.priority = DMA_PRIORITY_VERY_HIGH;
+	dma_init_struct.priority = DMA_PRIORITY_LOW;
 	dma_init_struct.loop_mode_enable = FALSE;
 	dma_init(DMA_TX_CH, &dma_init_struct);
 
@@ -385,7 +386,7 @@ void spi_bytes_read(uint8_t *pbuffer, uint32_t length)
 	dma_init_struct.peripheral_base_addr = (uint32_t)(&SPIX->dt);
 	dma_init_struct.peripheral_data_width = DMA_PERIPHERAL_DATA_WIDTH_BYTE;
 	dma_init_struct.peripheral_inc_enable = FALSE;
-	dma_init_struct.priority = DMA_PRIORITY_VERY_HIGH;
+	dma_init_struct.priority = DMA_PRIORITY_LOW;
 	dma_init_struct.loop_mode_enable = FALSE;
 	dma_init(DMA_RX_CH, &dma_init_struct);
 

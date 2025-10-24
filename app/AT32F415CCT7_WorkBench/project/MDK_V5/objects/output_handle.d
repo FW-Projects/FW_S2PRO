@@ -22,4 +22,5 @@
   D:\keil5.42\GorgonMeducer\perf_counter\2.4.0\perf_counter.h \
   D:\keil5.42\GorgonMeducer\perf_counter\2.4.0\perfc_port_default.h \
   ..\..\libraries\cmsis\cm4\core_support\cmsis_compiler.h \
-  ..\system\adc_filter.h
+  ..\system\adc_filter.h ..\app\display_handle.h ..\TFT2.8\lcd.h \
+  ..\TFT2.8\lcd_init.h ..\device\at32_spiflash.h

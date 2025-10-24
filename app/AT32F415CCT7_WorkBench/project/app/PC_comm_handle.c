@@ -22,7 +22,7 @@ void pc_comm_handle(void)
     {
         pc_event_handle();
         time = 0;
-    }
+    }   
     RecvDataFromPC(&pc_data);
 }
 
@@ -83,7 +83,6 @@ void pc_event_handle(void)
         pc_event = PC_END_EVENT;
         iap_flag = IAP_REV_FLAG_DONE;
         break;
-
     case PC_END_EVENT:
         break;
     }
@@ -125,3 +124,4 @@ static void WriteDataToPC(PC_DATA_t *pc,
     /* send data */
     usart_sendData(PC_USART, pc->tx_buff, PC_MAX_SEND_SIZE);
 }
+

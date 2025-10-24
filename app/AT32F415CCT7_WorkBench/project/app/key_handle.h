@@ -1,10 +1,10 @@
 #ifndef _KEY_HANDLE_H
 #define _KEY_HANDLE_H
 #include "key.h"
-#define KEY_HANDLE_TIME 20
+#define KEY_HANDLE_TIME 15
 #define HEL_TIME 90
 #include "stdbool.h"
-
+#define KEY_TASK_TIME          20
 typedef enum
 {
 	TEMP_ADD = 0,
@@ -19,11 +19,11 @@ typedef enum
 	PAGE_ADD,
 	PAGE_REDUCE,
 	EXIT_MENU,
-
+	
 	GET_CHANNEL_1,
 	GET_CHANNEL_2,
 	GET_CHANNEL_3,
-
+	CHANGE_CH,
 	SET_CHANNEL_1,
 	SET_CHANNEL_2,
 	SET_CHANNEL_3,

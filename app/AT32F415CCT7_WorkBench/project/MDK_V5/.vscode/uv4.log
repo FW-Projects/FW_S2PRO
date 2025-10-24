@@ -1,0 +1,23 @@
+*** Using Compiler 'V6.23', folder: 'D:\keil5.42\ARM\ARMCLANG\Bin'
+Build target 'AT32F415CCT7_WorkBench'
+../app/key_handle.c(176): warning: 4 enumeration values not handled in switch: 'KEY_NONE', 'KEY_PRESS', 'KEY_LONG_PRESS'... [-Wswitch]
+  176 |                 switch (key_event[1])
+      |                         ^~~~~~~~~~~~
+../app/key_handle.c(602): warning: 8 enumeration values not handled in switch: 'TIME_COUNTDOWN_EVENT', 'VALUE_RESET_EVENT', 'ENTER_SETS'... [-Wswitch]
+  602 |         switch (EVENT)
+      |                 ^~~~~
+2 warnings generated.
+compiling key_handle.c...
+linking...
+Program Size: Code=22336 RO-data=51400 RW-data=204 ZI-data=10060  
+FromELF: creating hex file...
+After Build - User command #1: fromelf.exe --bin --output .\Listings\AT32F415CCT7_WorkBench.bin .\objects\AT32F415CCT7_WorkBench.axf
+After Build - User command #2: D:\Sonix_project\BF05-master\BF05-master\app\project\MDK_V5\keil5_disp_size_bar.exe
+ram:
+  RW_IRAM1 :0x20000000
+   32.00 KB :|¡ö¡ö¡ö¡ö¡ö¡ö______________|   31.32 % (   10.02 KB /    32.00 KB) [22504 B]
+flash:
+  ER_IROM1 :0x8004000
+  256.00 KB :|¡ö¡ö¡ö¡ö¡ö_______________|   28.13 % (   72.01 KB /   256.00 KB) [188408 B]
+".\objects\AT32F415CCT7_WorkBench.axf" - 0 Error(s), 2 Warning(s).
+Build Time Elapsed:  00:00:02
