@@ -33,6 +33,7 @@ void LCD_ShowFloatNum(u16 x, u16 y, float num, u8 float_n, uint16_t fc, uint16_t
 void LCD_VISION(uint16_t x, uint16_t y,  uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey);
 void LCD_CH(uint16_t x, uint16_t y,  uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey,uint8_t in_ch);
 void LCD_MIN(uint16_t x, uint16_t y,  uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey);
+void LCD_Show_SLEEP_TIME(uint16_t x, uint16_t y, float num, uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey);
 void LCD_ShowPicture(uint16_t x, uint16_t y, uint16_t length, uint16_t width, const uint8_t pic[]);
 void LCD_Test(void);
 void LCD_Display(void);
@@ -98,34 +99,597 @@ void LCD_Show_Curve(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, float s1
 #define PIC_ADDRESS_25 0x00326900
 #define PIC_ADDRESS_26 0x00348000
 #define PIC_ADDRESS_27 0x00369700
-#define PIC_ADDRESS_28 0x00369988
-#define PIC_ADDRESS_29 0x00369C10
-#define PIC_ADDRESS_30 0x00374E30
-#define PIC_ADDRESS_31 0x0037CE54
-#define PIC_ADDRESS_32 0x0037E060
-#define PIC_ADDRESS_33 0x0037F26C
-#define PIC_ADDRESS_34 0x00387290
-#define PIC_ADDRESS_35 0x00387FB0
-#define PIC_ADDRESS_36 0x00388CD0
-#define PIC_ADDRESS_37 0x00388FEE
-#define PIC_ADDRESS_38 0x0038930C
-#define PIC_ADDRESS_39 0x0038AA6C
-#define PIC_ADDRESS_40 0x0038C1CC
-#define PIC_ADDRESS_41 0x003941F0
-#define PIC_ADDRESS_42 0x00394748
-#define PIC_ADDRESS_43 0x00394A1A
-#define PIC_ADDRESS_44 0x00394CEC
-#define PIC_ADDRESS_45 0x00395244
-#define PIC_ADDRESS_46 0x00395588
-#define PIC_ADDRESS_47 0x003958CC
-#define PIC_ADDRESS_48 0x003959D4
-#define PIC_ADDRESS_49 0x00399AD4
-#define PIC_ADDRESS_50 0x0039AED4
-#define PIC_ADDRESS_51 0x0039C2D4
-#define PIC_ADDRESS_52 0x0039D6D4
-#define PIC_ADDRESS_53 0x0039EAD4
-#define PIC_ADDRESS_54 0x0039FED4
-#define PIC_ADDRESS_55 0x003A12D4
+#define PIC_ADDRESS_28 0x0038AE00
+#define PIC_ADDRESS_29 0x003AC500
+#define PIC_ADDRESS_30 0x003CDC00
+#define PIC_ADDRESS_31 0x003EF300
+#define PIC_ADDRESS_32 0x00410A00
+#define PIC_ADDRESS_33 0x00432100
+#define PIC_ADDRESS_34 0x00453800
+#define PIC_ADDRESS_35 0x00474F00
+#define PIC_ADDRESS_36 0x00496600
+#define PIC_ADDRESS_37 0x004B7D00
+#define PIC_ADDRESS_38 0x004D9400
+#define PIC_ADDRESS_39 0x004FAB00
+#define PIC_ADDRESS_40 0x0051C200
+#define PIC_ADDRESS_41 0x0053D900
+#define PIC_ADDRESS_42 0x0055F000
+#define PIC_ADDRESS_43 0x00580700
+#define PIC_ADDRESS_44 0x005A1E00
+#define PIC_ADDRESS_45 0x005C3500
+#define PIC_ADDRESS_46 0x005E4C00
+#define PIC_ADDRESS_47 0x00606300
+#define PIC_ADDRESS_48 0x00627A00
+#define PIC_ADDRESS_49 0x00649100
+#define PIC_ADDRESS_50 0x0066A800
+#define PIC_ADDRESS_51 0x0066AA88
+#define PIC_ADDRESS_52 0x0066AD10
+#define PIC_ADDRESS_53 0x0066B054
+#define PIC_ADDRESS_54 0x0066B398
+#define PIC_ADDRESS_55 0x0066C798
+#define PIC_ADDRESS_56 0x0066DB98
+#define PIC_ADDRESS_57 0x0066EF98
+#define PIC_ADDRESS_58 0x00670398
+#define PIC_ADDRESS_59 0x00671798
+#define PIC_ADDRESS_60 0x00672B98
+#define PIC_ADDRESS_61 0x00672EB6
+#define PIC_ADDRESS_62 0x006731D4
+#define PIC_ADDRESS_63 0x006734A6
+#define PIC_ADDRESS_64 0x00673778
+#define PIC_ADDRESS_65 0x0067BD10
+#define PIC_ADDRESS_66 0x006842A8
+#define PIC_ADDRESS_67 0x0068C2CC
+#define PIC_ADDRESS_68 0x006942F0
+#define PIC_ADDRESS_69 0x0069C314
+#define PIC_ADDRESS_70 0x006A4338
+#define PIC_ADDRESS_71 0x006AC35C
+#define PIC_ADDRESS_72 0x006B4380
+#define PIC_ADDRESS_73 0x006BC3A4
+#define PIC_ADDRESS_74 0x006C43C8
+#define PIC_ADDRESS_75 0x006C55D4
+#define PIC_ADDRESS_76 0x006C67E0
+#define PIC_ADDRESS_77 0x006C79EC
+#define PIC_ADDRESS_78 0x006C8BF8
+#define PIC_ADDRESS_79 0x006C9918
+#define PIC_ADDRESS_80 0x006CA638
+#define PIC_ADDRESS_81 0x006CB358
+#define PIC_ADDRESS_82 0x006CC078
+#define PIC_ADDRESS_83 0x006CD7D8
+#define PIC_ADDRESS_84 0x006CEF38
+#define PIC_ADDRESS_85 0x006D0698
+#define PIC_ADDRESS_86 0x006D1DF8
+#define PIC_ADDRESS_87 0x006D1F00
+//#define PIC_ADDRESS_88 
+//#define PIC_ADDRESS_89 
+//#define PIC_ADDRESS_90 
+//#define PIC_ADDRESS_91 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

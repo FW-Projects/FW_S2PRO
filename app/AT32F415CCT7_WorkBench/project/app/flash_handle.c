@@ -55,6 +55,7 @@ void FlashProc(void)
     static uint16_t last_ch2_set_temp = 0;
     static uint16_t last_ch3_set_temp = 0;
     static work_mode_e last_show_mode = WORK_NORMAL;
+	static uint16_t last_language_state = CHINESE;
     static uint16_t flash_version = 0;
     static uint8_t flash_count = 0;
     static uint16_t a_ver;
@@ -107,6 +108,7 @@ void FlashProc(void)
             last_ch3_set_temp = sFWS2_t.general_parameter.ch3_set_temp;
             last_set_sleep_time = sFWS2_t.base.set_sleep_time;
             last_show_mode = sFWS2_t.work_mode;
+			last_language_state = sFWS2_t.general_parameter.language_state;
             first_start_flag = TRUE;
             /* system run */
             sFWS2_t.init_flag = TRUE;
@@ -129,7 +131,8 @@ void FlashProc(void)
             last_ch1_set_temp != sFWS2_t.general_parameter.ch1_set_temp ||
             last_ch2_set_temp != sFWS2_t.general_parameter.ch2_set_temp ||
             last_ch3_set_temp != sFWS2_t.general_parameter.ch3_set_temp ||
-            last_show_mode != sFWS2_t.work_mode)
+            last_show_mode != sFWS2_t.work_mode ||
+			last_language_state != sFWS2_t.general_parameter.language_state)
         {
             flash_unlock();
 
@@ -171,6 +174,7 @@ void FlashProc(void)
             flash_halfword_program(A_LAST_CH3_SET_TEMP, sFWS2_t.general_parameter.ch3_set_temp);
             flash_halfword_program(A_LAST_SET_SLEEP_TIME, sFWS2_t.base.set_sleep_time);
             flash_halfword_program(A_LAST_SHOW_MODE_ADDRESS, sFWS2_t.work_mode);
+			flash_halfword_program(A_LAST_LANGUAGE_STATE_ADDRESS, sFWS2_t.general_parameter.language_state);
         }
         else
         {
@@ -179,12 +183,14 @@ void FlashProc(void)
             flash_halfword_program(B_LAST_CH3_SET_TEMP, sFWS2_t.general_parameter.ch3_set_temp);
             flash_halfword_program(B_LAST_SET_SLEEP_TIME, sFWS2_t.base.set_sleep_time);
             flash_halfword_program(B_LAST_SHOW_MODE_ADDRESS, sFWS2_t.work_mode);
+			flash_halfword_program(B_LAST_LANGUAGE_STATE_ADDRESS, sFWS2_t.general_parameter.language_state);
         }
         last_ch1_set_temp = sFWS2_t.general_parameter.ch1_set_temp;
         last_ch2_set_temp = sFWS2_t.general_parameter.ch2_set_temp;
         last_ch3_set_temp = sFWS2_t.general_parameter.ch3_set_temp;
         last_set_sleep_time = sFWS2_t.base.set_sleep_time;
         last_show_mode = sFWS2_t.work_mode;
+		last_language_state = sFWS2_t.general_parameter.language_state;
         sflash.state++;
         break;
     case FLASH_FINSH:
@@ -217,6 +223,7 @@ void get_data_from_a(void)
     sFWS2_t.general_parameter.ch3_set_temp = flash_read_halfword(A_LAST_CH3_SET_TEMP);
     sFWS2_t.base.set_sleep_time = flash_read_halfword(A_LAST_SET_SLEEP_TIME);
     sFWS2_t.work_mode = flash_read_halfword(A_LAST_SHOW_MODE_ADDRESS);
+	sFWS2_t.general_parameter.language_state = flash_read_halfword(A_LAST_LANGUAGE_STATE_ADDRESS);
 }
 
 void get_data_from_b(void)
@@ -231,6 +238,7 @@ void get_data_from_b(void)
     sFWS2_t.general_parameter.ch3_set_temp = flash_read_halfword(B_LAST_CH3_SET_TEMP);
     sFWS2_t.base.set_sleep_time = flash_read_halfword(B_LAST_SET_SLEEP_TIME);
     sFWS2_t.work_mode = flash_read_halfword(B_LAST_SHOW_MODE_ADDRESS);
+	sFWS2_t.general_parameter.language_state = flash_read_halfword(B_LAST_LANGUAGE_STATE_ADDRESS);
 }
 
 static void get_reset_data(void)
@@ -245,7 +253,7 @@ static void get_reset_data(void)
     sFWS2_t.general_parameter.ch3_set_temp = 380;
     sFWS2_t.base.set_sleep_time = 0x00;
     sFWS2_t.work_mode = WORK_NORMAL;
-    //	sFWS2_t.work_mode = WORK_CURVE;
+	sFWS2_t.general_parameter.language_state = CHINESE;
 }
 
 static void check_data_all(void)
@@ -270,7 +278,7 @@ static void check_data_all(void)
         sFWS2_t.general_parameter.display_lock_state = LOCK;
     }
 
-    if (sFWS2_t.base.set_sleep_time > 99 || sFWS2_t.base.set_sleep_time < 0)
+    if (sFWS2_t.base.set_sleep_time > 999 || sFWS2_t.base.set_sleep_time < 0)
     {
         sFWS2_t.base.set_sleep_time = 0x00;
     }
@@ -308,6 +316,9 @@ static void check_data_all(void)
     if (sFWS2_t.work_mode != WORK_NORMAL && sFWS2_t.work_mode != WORK_CURVE)
     {
         sFWS2_t.work_mode = WORK_NORMAL;
-        //		sFWS2_t.work_mode = WORK_CURVE;
+    }
+	if (sFWS2_t.general_parameter.language_state != CHINESE && sFWS2_t.general_parameter.language_state != ENGLISH)
+    {
+        sFWS2_t.general_parameter.language_state = CHINESE;
     }
 }

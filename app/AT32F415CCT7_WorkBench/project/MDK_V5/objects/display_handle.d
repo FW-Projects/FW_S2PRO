@@ -21,4 +21,5 @@
   ..\device\at32_spiflash.h ..\app\FWS2pro_handle.h \
   D:\keil5.42\GorgonMeducer\perf_counter\2.4.0\perf_counter.h \
   D:\keil5.42\GorgonMeducer\perf_counter\2.4.0\perfc_port_default.h \
-  ..\..\libraries\cmsis\cm4\core_support\cmsis_compiler.h
+  ..\..\libraries\cmsis\cm4\core_support\cmsis_compiler.h \
+  D:\keil5.42\ARM\CMSIS-View\1.2.0\EventRecorder\Include\EventRecorder.h

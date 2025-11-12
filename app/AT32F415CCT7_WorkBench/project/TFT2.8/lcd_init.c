@@ -201,8 +201,92 @@ void LCD_Init(void)
     LCD_WR_DATA8(0x1c);
     LCD_WR_DATA8(0x22);
     LCD_WR_DATA8(0x1f);
-//    LCD_WR_REG(0x21);
+    LCD_WR_REG(0x21);
     LCD_WR_REG(0x29);
 
+
+//	LCD_WR_REG(0x11);     
+
+////	Delay(120);                
+
+////	LCD_WR_REG(0x36);     
+////	LCD_WR_DATA8(0x00);   
+
+//	LCD_WR_REG(0x3A);     
+//	LCD_WR_DATA8(0x05);   
+
+//	LCD_WR_REG(0xB2);     
+//	LCD_WR_DATA8(0x0C);   
+//	LCD_WR_DATA8(0x0C);   
+//	LCD_WR_DATA8(0x00);   
+//	LCD_WR_DATA8(0x33);   
+//	LCD_WR_DATA8(0x33);   
+
+//	LCD_WR_REG(0xB7);     
+//	LCD_WR_DATA8(0x55);   
+
+//	LCD_WR_REG(0xBB);     
+//	LCD_WR_DATA8(0x19);   
+
+//	LCD_WR_REG(0xC0);     
+//	LCD_WR_DATA8(0x2C);   
+
+//	LCD_WR_REG(0xC2);     
+//	LCD_WR_DATA8(0x01);   
+
+//	LCD_WR_REG(0xC3);     
+//	LCD_WR_DATA8(0x13);   
+
+//	LCD_WR_REG(0xC6);     
+//	LCD_WR_DATA8(0x12);   
+
+//	LCD_WR_REG(0xD0);     
+//	LCD_WR_DATA8(0xA7);   
+
+//	LCD_WR_REG(0xD0);     
+//	LCD_WR_DATA8(0xA4);   
+//	LCD_WR_DATA8(0xA1);   
+
+//	LCD_WR_REG(0xD6);     
+//	LCD_WR_DATA8(0xA1);   
+
+//	LCD_WR_REG(0xE0);
+//	LCD_WR_DATA8(0xF0);
+//	LCD_WR_DATA8(0x04);
+//	LCD_WR_DATA8(0x08);
+//	LCD_WR_DATA8(0x09);
+//	LCD_WR_DATA8(0x08);
+//	LCD_WR_DATA8(0x05);
+//	LCD_WR_DATA8(0x26);
+//	LCD_WR_DATA8(0x33);
+//	LCD_WR_DATA8(0x3E);
+//	LCD_WR_DATA8(0x3A);
+//	LCD_WR_DATA8(0x16);
+//	LCD_WR_DATA8(0x14);
+//	LCD_WR_DATA8(0x2E);
+//	LCD_WR_DATA8(0x37);
+
+//	LCD_WR_REG(0xE1);
+//	LCD_WR_DATA8(0xF0);
+//	LCD_WR_DATA8(0x01);
+//	LCD_WR_DATA8(0x05);
+//	LCD_WR_DATA8(0x06);
+//	LCD_WR_DATA8(0x06);
+//	LCD_WR_DATA8(0x12);
+//	LCD_WR_DATA8(0x26);
+//	LCD_WR_DATA8(0x33);
+//	LCD_WR_DATA8(0x3E);
+//	LCD_WR_DATA8(0x38);
+//	LCD_WR_DATA8(0x14);
+//	LCD_WR_DATA8(0x15);
+//	LCD_WR_DATA8(0x2C);
+//	LCD_WR_DATA8(0x34);
+//	  
+//	LCD_WR_REG(0x21);     
+
+//	LCD_WR_REG(0x29);     
+
+//	LCD_WR_REG(0x2C);   
     
 }
+

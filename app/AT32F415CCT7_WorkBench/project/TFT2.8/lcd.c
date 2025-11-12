@@ -596,6 +596,54 @@ void LCD_ShowIntNum(uint16_t x, uint16_t y, uint16_t num, uint8_t len, uint16_t 
         LCD_ShowChar(x + t * sizex, y, temp + 48, fc, bc, sizey, 0);
     }
 }
+
+void LCD_Show_SLEEP_TIME(uint16_t x, uint16_t y, float num, uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey)
+{
+    uint8_t t, temp;
+    uint8_t enshow = 0;
+    uint8_t sizex = sizey / 2;
+	uint8_t decimal_data = 0;
+	uint8_t bai = 0,shi = 0,ge = 0;
+
+	decimal_data = (uint16_t)(num * 10) % 10;
+	bai = (uint16_t)num / 100;
+	shi = (uint16_t)num / 10 % 10;
+	ge = (uint16_t)num % 10;
+    for (t = 0; t < len; t++)
+    {
+       switch(t)
+		{
+//			case 1:
+//				if(bai == 0)
+//					LCD_ShowChar(x + t * sizex, y, '0', fc, bc, sizey, 0);
+//				else
+//					LCD_ShowChar(x + t * sizex, y, bai+48, fc, bc, sizey, 0);
+//				break;
+			case 1:
+				if(shi == 0)
+					LCD_ShowChar(x + t * sizex, y, '0', fc, bc, sizey, 0);
+				else
+					LCD_ShowChar(x + t * sizex, y, shi+48, fc, bc, sizey, 0);
+				break;
+			case 2:
+				if(ge == 0)
+					LCD_ShowChar(x + t * sizex, y, '0', fc, bc, sizey, 0);
+				else
+					LCD_ShowChar(x + t * sizex, y, ge+48, fc, bc, sizey, 0);
+				break;
+			case 3:
+				LCD_ShowChar(x + t * sizex, y, '.', fc, bc, sizey, 0);
+				break;
+			case 4:
+				if(decimal_data == 0)
+					LCD_ShowChar(x + t * sizex, y, '0', fc, bc, sizey, 0);
+				else 	
+					LCD_ShowChar(x + t * sizex, y, decimal_data+48, fc, bc, sizey, 0);
+				break;
+		}
+    }
+}
+
 void LCD_VISION(uint16_t x, uint16_t y,  uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey)
 {
 	uint8_t t, temp;
@@ -775,175 +823,342 @@ void TranferPicturetoTFT_LCD(uint16_t x1, uint16_t y1, uint16_t width, uint16_t 
     uint16_t usPic_Data;
     static u8 Read_data[BLOCK_SIZE] = {0};
     uiDataLength = (width) * (height) * 2;
-    switch (Pic_Num)
-    {
-    case 1:
-        uiPic_Addr = PIC_ADDRESS_1;
-        break;
-    case 2:
-        uiPic_Addr = PIC_ADDRESS_2;
-        break;
-    case 3:
-        uiPic_Addr = PIC_ADDRESS_3;
-        break;
-    case 4:
-        uiPic_Addr = PIC_ADDRESS_4;
-        break;
-    case 5:
-        uiPic_Addr = PIC_ADDRESS_5;
-        break;
-    case 6:
-        uiPic_Addr = PIC_ADDRESS_6;
-        break;
-    case 7:
-        uiPic_Addr = PIC_ADDRESS_7;
-        break;
-    case 8:
-        uiPic_Addr = PIC_ADDRESS_8;
-        break;
-    case 9:
-        uiPic_Addr = PIC_ADDRESS_9;
-        break;
-    case 10:
-        uiPic_Addr = PIC_ADDRESS_10;
-        break;
-    case 11:
-        uiPic_Addr = PIC_ADDRESS_11;
-        break;
-    case 12:
-        uiPic_Addr = PIC_ADDRESS_12;
-        break;
-    case 13:
-        uiPic_Addr = PIC_ADDRESS_13;
-        break;
-    case 14:
-        uiPic_Addr = PIC_ADDRESS_14;
-        break;
-    case 15:
-        uiPic_Addr = PIC_ADDRESS_15;
-        break;
-    case 16:
-        uiPic_Addr = PIC_ADDRESS_16;
-        break;
-    case 17:
-        uiPic_Addr = PIC_ADDRESS_17;
-        break;
-    case 18:
-        uiPic_Addr = PIC_ADDRESS_18;
-        break;
-    case 19:
-        uiPic_Addr = PIC_ADDRESS_19;
-        break;
-    case 20:
-        uiPic_Addr = PIC_ADDRESS_20;
-        break;
-    case 21:
-        uiPic_Addr = PIC_ADDRESS_21;
-        break;
-    case 22:
-        uiPic_Addr = PIC_ADDRESS_22;
-        break;
-    case 23:
-        uiPic_Addr = PIC_ADDRESS_23;
-        break;
-    case 24:
-        uiPic_Addr = PIC_ADDRESS_24;
-        break;
-    case 25:
-        uiPic_Addr = PIC_ADDRESS_25;
-        break;
-    case 26:
-        uiPic_Addr = PIC_ADDRESS_26;
-        break;
-    case 27:
-        uiPic_Addr = PIC_ADDRESS_27;
-        break;
-    case 28:
-        uiPic_Addr = PIC_ADDRESS_28;
-        break;
-    case 29:
-        uiPic_Addr = PIC_ADDRESS_29;
-        break;
-    case 30:
-        uiPic_Addr = PIC_ADDRESS_30;
-        break;
-    case 31:
-        uiPic_Addr = PIC_ADDRESS_31;
-        break;
-    case 32:
-        uiPic_Addr = PIC_ADDRESS_32;
-        break;
-    case 33:
-        uiPic_Addr = PIC_ADDRESS_33;
-        break;
-    case 34:
-        uiPic_Addr = PIC_ADDRESS_34;
-        break;
-    case 35:
-        uiPic_Addr = PIC_ADDRESS_35;
-        break;
-    case 36:
-        uiPic_Addr = PIC_ADDRESS_36;
-        break;
-    case 37:
-        uiPic_Addr = PIC_ADDRESS_37;
-        break;
-    case 38:
-        uiPic_Addr = PIC_ADDRESS_38;
-        break;
-    case 39:
-        uiPic_Addr = PIC_ADDRESS_39;
-        break;
-    case 40:
-        uiPic_Addr = PIC_ADDRESS_40;
-        break;
-    case 41:
-        uiPic_Addr = PIC_ADDRESS_41;
-        break;
-    case 42:
-        uiPic_Addr = PIC_ADDRESS_42;
-        break;
-    case 43:
-        uiPic_Addr = PIC_ADDRESS_43;
-        break;
-    case 44:
-        uiPic_Addr = PIC_ADDRESS_44;
-        break;
-    case 45:
-        uiPic_Addr = PIC_ADDRESS_45;
-        break;
-    case 46:
-        uiPic_Addr = PIC_ADDRESS_46;
-        break;
-    case 47:
-        uiPic_Addr = PIC_ADDRESS_47;
-        break;
-	case 48:
-        uiPic_Addr = PIC_ADDRESS_48;
-        break;
-	case 49:
-        uiPic_Addr = PIC_ADDRESS_49;
-        break;
-	case 50:
-        uiPic_Addr = PIC_ADDRESS_50;
-        break;
-	case 51:
-        uiPic_Addr = PIC_ADDRESS_51;
-        break;
-	case 52:
-        uiPic_Addr = PIC_ADDRESS_52;
-        break;
-	case 53:
-        uiPic_Addr = PIC_ADDRESS_53;
-        break;
-	case 54:
-        uiPic_Addr = PIC_ADDRESS_54;
-        break;
-	case 55:
-        uiPic_Addr = PIC_ADDRESS_55;
-        break;
-	
-    }
+	if(sFWS2_t.general_parameter.language_state == CHINESE)
+	{
+		switch (Pic_Num)
+		{
+		case 1:
+			uiPic_Addr = PIC_ADDRESS_1;
+			break;
+		case 2:
+			uiPic_Addr = PIC_ADDRESS_2;
+			break;
+		case 3:
+			uiPic_Addr = PIC_ADDRESS_3;
+			break;
+		case 4:
+			uiPic_Addr = PIC_ADDRESS_4;
+			break;
+		case 6:
+			uiPic_Addr = PIC_ADDRESS_6;
+			break;
+		case 8:
+			uiPic_Addr = PIC_ADDRESS_8;
+			break;
+		case 10:
+			uiPic_Addr = PIC_ADDRESS_10;
+			break;
+		case 12:
+			uiPic_Addr = PIC_ADDRESS_12;
+			break;
+		case 14:
+			uiPic_Addr = PIC_ADDRESS_14;
+			break;
+		case 16:
+			uiPic_Addr = PIC_ADDRESS_16;
+			break;
+		case 18:
+			uiPic_Addr = PIC_ADDRESS_18;
+			break;
+		case 20:
+			uiPic_Addr = PIC_ADDRESS_20;
+			break;
+		case 22:
+			uiPic_Addr = PIC_ADDRESS_22;
+			break;
+		case 24:
+			uiPic_Addr = PIC_ADDRESS_24;
+			break;
+		case 26:
+			uiPic_Addr = PIC_ADDRESS_26;
+			break;
+		case 27:
+			uiPic_Addr = PIC_ADDRESS_27;
+			break;
+		case 29:
+			uiPic_Addr = PIC_ADDRESS_29;
+			break;
+		case 31:
+			uiPic_Addr = PIC_ADDRESS_31;
+			break;
+		case 33:
+			uiPic_Addr = PIC_ADDRESS_33;
+			break;
+		case 35:
+			uiPic_Addr = PIC_ADDRESS_35;
+			break;
+		case 37:
+			uiPic_Addr = PIC_ADDRESS_37;
+			break;
+		case 39:
+			uiPic_Addr = PIC_ADDRESS_39;
+			break;
+		case 41:
+			uiPic_Addr = PIC_ADDRESS_41;
+			break;
+		case 42:
+			uiPic_Addr = PIC_ADDRESS_42;
+			break;
+		case 44:
+			uiPic_Addr = PIC_ADDRESS_44;
+			break;
+		case 46:
+			uiPic_Addr = PIC_ADDRESS_46;
+			break;
+		case 48:
+			uiPic_Addr = PIC_ADDRESS_48;
+			break;
+		case 50:
+			uiPic_Addr = PIC_ADDRESS_50;
+			break;
+		case 51:
+			uiPic_Addr = PIC_ADDRESS_51;
+			break;
+		case 52:
+			uiPic_Addr = PIC_ADDRESS_52;
+			break;
+		case 53:
+			uiPic_Addr = PIC_ADDRESS_53;
+			break;
+		case 54:
+			uiPic_Addr = PIC_ADDRESS_54;
+			break;
+		case 55:
+			uiPic_Addr = PIC_ADDRESS_55;
+			break;
+		case 56:
+			uiPic_Addr = PIC_ADDRESS_56;
+			break;
+		case 57:
+			uiPic_Addr = PIC_ADDRESS_57;
+			break;
+		case 58:
+			uiPic_Addr = PIC_ADDRESS_58;
+			break;
+		case 59:
+			uiPic_Addr = PIC_ADDRESS_59;
+			break;
+		case 60:
+			uiPic_Addr = PIC_ADDRESS_60;
+			break;
+		case 61:
+			uiPic_Addr = PIC_ADDRESS_61;
+			break;
+		case 62:
+			uiPic_Addr = PIC_ADDRESS_62;
+			break;
+		case 63:
+			uiPic_Addr = PIC_ADDRESS_63;
+			break;
+		case 64:
+			uiPic_Addr = PIC_ADDRESS_64;
+			break;
+		case 66:
+			uiPic_Addr = PIC_ADDRESS_66;
+			break;
+		case 68:
+			uiPic_Addr = PIC_ADDRESS_68;
+			break;
+		case 70:
+			uiPic_Addr = PIC_ADDRESS_70;
+			break;
+		case 72:
+			uiPic_Addr = PIC_ADDRESS_72;
+			break;
+		case 74:
+			uiPic_Addr = PIC_ADDRESS_74;
+			break;
+		case 75:
+			uiPic_Addr = PIC_ADDRESS_75;
+			break;
+		case 78:
+			uiPic_Addr = PIC_ADDRESS_78;
+			break;
+		case 79:
+			uiPic_Addr = PIC_ADDRESS_79;
+			break;
+		case 82:
+			uiPic_Addr = PIC_ADDRESS_82;
+			break;
+		case 83:
+			uiPic_Addr = PIC_ADDRESS_83;
+			break;
+		case 86:
+			uiPic_Addr = PIC_ADDRESS_86;
+			break;
+		case 87:
+			uiPic_Addr = PIC_ADDRESS_87;
+			break;
+		}
+	}
+	else if(sFWS2_t.general_parameter.language_state == ENGLISH)
+	{
+		switch (Pic_Num)
+		{
+		case 1:
+			uiPic_Addr = PIC_ADDRESS_1;
+			break;
+		case 2:
+			uiPic_Addr = PIC_ADDRESS_2;
+			break;
+		case 3:
+			uiPic_Addr = PIC_ADDRESS_3;
+			break;
+		case 4:
+			uiPic_Addr = PIC_ADDRESS_5;
+			break;
+		case 6:
+			uiPic_Addr = PIC_ADDRESS_7;
+			break;
+		case 8:
+			uiPic_Addr = PIC_ADDRESS_9;
+			break;
+		case 10:
+			uiPic_Addr = PIC_ADDRESS_11;
+			break;
+		case 12:
+			uiPic_Addr = PIC_ADDRESS_13;
+			break;
+		case 14:
+			uiPic_Addr = PIC_ADDRESS_15;
+			break;
+		case 16:
+			uiPic_Addr = PIC_ADDRESS_17;
+			break;
+		case 18:
+			uiPic_Addr = PIC_ADDRESS_19;
+			break;
+		case 20:
+			uiPic_Addr = PIC_ADDRESS_21;
+			break;
+		case 22:
+			uiPic_Addr = PIC_ADDRESS_23;
+			break;
+		case 24:
+			uiPic_Addr = PIC_ADDRESS_25;
+			break;
+		case 26:
+			uiPic_Addr = PIC_ADDRESS_26;
+			break;
+		case 27:
+			uiPic_Addr = PIC_ADDRESS_28;
+			break;
+		case 29:
+			uiPic_Addr = PIC_ADDRESS_30;
+			break;
+		case 31:
+			uiPic_Addr = PIC_ADDRESS_32;
+			break;
+		case 33:
+			uiPic_Addr = PIC_ADDRESS_34;
+			break;
+		case 35:
+			uiPic_Addr = PIC_ADDRESS_36;
+			break;
+		case 37:
+			uiPic_Addr = PIC_ADDRESS_38;
+			break;
+		case 40:
+			uiPic_Addr = PIC_ADDRESS_40;
+			break;
+		case 41:
+			uiPic_Addr = PIC_ADDRESS_41;
+			break;
+		case 42:
+			uiPic_Addr = PIC_ADDRESS_43;
+			break;
+		case 44:
+			uiPic_Addr = PIC_ADDRESS_45;
+			break;
+		case 46:
+			uiPic_Addr = PIC_ADDRESS_47;
+			break;
+		case 48:
+			uiPic_Addr = PIC_ADDRESS_49;
+			break;
+		case 50:
+			uiPic_Addr = PIC_ADDRESS_50;
+			break;
+		case 51:
+			uiPic_Addr = PIC_ADDRESS_51;
+			break;
+		case 52:
+			uiPic_Addr = PIC_ADDRESS_52;
+			break;
+		case 53:
+			uiPic_Addr = PIC_ADDRESS_53;
+			break;
+		case 54:
+			uiPic_Addr = PIC_ADDRESS_54;
+			break;
+		case 55:
+			uiPic_Addr = PIC_ADDRESS_55;
+			break;
+		case 56:
+			uiPic_Addr = PIC_ADDRESS_56;
+			break;
+		case 57:
+			uiPic_Addr = PIC_ADDRESS_57;
+			break;
+		case 58:
+			uiPic_Addr = PIC_ADDRESS_58;
+			break;
+		case 59:
+			uiPic_Addr = PIC_ADDRESS_59;
+			break;	
+		case 60:
+			uiPic_Addr = PIC_ADDRESS_60;
+			break;
+		case 61:
+			uiPic_Addr = PIC_ADDRESS_61;
+			break;
+		case 62:
+			uiPic_Addr = PIC_ADDRESS_62;
+			break;
+		case 63:
+			uiPic_Addr = PIC_ADDRESS_63;
+			break;
+		case 64:
+			uiPic_Addr = PIC_ADDRESS_65;
+			break;
+		case 66:
+			uiPic_Addr = PIC_ADDRESS_67;
+			break;
+		case 68:
+			uiPic_Addr = PIC_ADDRESS_69;
+			break;
+		case 70:
+			uiPic_Addr = PIC_ADDRESS_71;
+			break;
+		case 72:
+			uiPic_Addr = PIC_ADDRESS_73;
+			break;
+		case 74:
+			uiPic_Addr = PIC_ADDRESS_76;
+			break;
+		case 75:
+			uiPic_Addr = PIC_ADDRESS_77;
+			break;
+		case 78:
+			uiPic_Addr = PIC_ADDRESS_80;
+			break;
+		case 79:
+			uiPic_Addr = PIC_ADDRESS_81;
+			break;
+		case 82:
+			uiPic_Addr = PIC_ADDRESS_84;
+			break;
+		case 83:
+			uiPic_Addr = PIC_ADDRESS_85;
+			break;
+		case 86:
+			uiPic_Addr = PIC_ADDRESS_86;
+			break;
+		case 87:
+			uiPic_Addr = PIC_ADDRESS_87;
+			break;
+		}
+	}
     width = width + x1;
     height = height + y1;
     LCD_Address_Set(x1, y1, width - 1, height - 1);

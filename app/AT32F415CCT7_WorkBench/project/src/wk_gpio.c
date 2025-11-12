@@ -104,7 +104,7 @@ void wk_gpio_config(void)
   gpio_init(GPIOA, &gpio_init_struct);
 
   gpio_init_struct.gpio_mode = GPIO_MODE_ANALOG;
-  gpio_init_struct.gpio_pins = GPIO_PINS_1 | GPIO_PINS_2 | GPIO_PINS_10 | GPIO_PINS_7;
+  gpio_init_struct.gpio_pins = GPIO_PINS_2 | GPIO_PINS_10 | GPIO_PINS_7;
   gpio_init_struct.gpio_pull = GPIO_PULL_NONE;
   gpio_init(GPIOB, &gpio_init_struct);
 

@@ -10,6 +10,7 @@
 static void check_error_state(void);
 static void check_handle(void);
 static void check_rpc(void);
+void fan_control(void);
 uint8_t Check_temp_difference(uint16_t in_set, uint16_t in_real, char in_dif);
 
 uint8_t off_set_buff[26] = {8, 7, 5, 4, 3, 2, 2, 2, 1, 0,
@@ -19,9 +20,35 @@ uint8_t off_set_buff[26] = {8, 7, 5, 4, 3, 2, 2, 2, 1, 0,
 void output_handle(void)
 {
 	check_handle();
-	check_error_state();  
-//	check_current();
+//	check_error_state();  
+	fan_control();
 }
+
+
+void fan_control(void)
+{
+	static bool first_in = false;
+	
+	if(first_in == false)
+	{
+		first_in = true;
+		tmr_channel_value_set(TMR3, TMR_SELECT_CHANNEL_4, 4599 * 0.90);
+	}
+	
+	if(sFWS2_t.base.cpu_temp >= 50)
+	{
+		tmr_channel_value_set(TMR3, TMR_SELECT_CHANNEL_4, 4599 * 0.98);
+	}
+	else if(sFWS2_t.base.cpu_temp <= 45 && sFWS2_t.base.cpu_temp >= 40)
+	{
+		tmr_channel_value_set(TMR3, TMR_SELECT_CHANNEL_4, 4599 * 0.95);
+	}
+	else if(sFWS2_t.base.cpu_temp < 35)
+	{
+		tmr_channel_value_set(TMR3, TMR_SELECT_CHANNEL_4, 4599 * 0.90);
+	}
+}
+
 
 
 static void check_error_state(void)
@@ -247,42 +274,50 @@ void pwm_control(void)
 void sleep_control(void)
 {
 	static bool wake_up_flag = false;
-	static bool first_in = false;
+	static bool first_in = false,first_sleep = false;
 	static uint16_t time_count_ms = 0;
 	static uint8_t time_count_s = 0;
 
 	if (sFWS2_t.Direct_handle_position == IN_POSSITION)
 	{
 		first_in = false;
-
-		if (sFWS2_t.base.sleep_time_count)
+		if(first_sleep == false)
 		{
-			sFWS2_t.Direct_handle_state = HANDLE_WORKING;
-			time_count_ms++;
-
-			if (time_count_ms >= 1000)
-			{
-				
-				time_count_ms = 0;
-				time_count_s++;
-
-				if (time_count_s >= 60)
-				{
-					time_count_s = 0;
-					sFWS2_t.base.sleep_time_count--;
-				}
-			}
+			sFWS2_t.Direct_handle_state = HANDLE_SLEEP;
 		}
 		else
 		{
-			if (sFWS2_t.Direct_handle_state == HANDLE_WORKING)
+			if (sFWS2_t.base.sleep_time_count)
 			{
-				sFWS2_t.Direct_handle_state = HANDLE_SLEEP;
+				sFWS2_t.Direct_handle_state = HANDLE_WORKING;
+				time_count_ms++;
+
+				if (time_count_ms >= 1000)
+				{
+					
+					time_count_ms = 0;
+					time_count_s++;
+					
+					if(time_count_s >= 6)
+					{
+						sFWS2_t.base.sleep_time_count-=0.1;
+						time_count_s = 0;
+					}
+					
+				}
+			}
+			else
+			{
+				if (sFWS2_t.Direct_handle_state == HANDLE_WORKING)
+				{
+					sFWS2_t.Direct_handle_state = HANDLE_SLEEP;
+				}
 			}
 		}
 	}
 	else if (sFWS2_t.Direct_handle_position == NOT_IN_POSSITION)
-	{
+	{	
+		first_sleep = true;
 		if (first_in == false)
 		{
 			first_in = true;
@@ -322,12 +357,23 @@ void sleep_control(void)
 
 void rpc_control(void)
 {
+	static uint8_t rpc_times = 0x00;
 	if(sFWS2_t.Direct_handle_rpc == IN_RPC)
+	if(gpio_input_data_bit_read(GPIOB,GPIO_PINS_6) == false)
 	{
-		sFWS2_t.Direct_handle_state = HANDLE_RPC;
+		rpc_times++;
+		if(rpc_times > 20)
+		{
+			rpc_times = 0x00;
+			sFWS2_t.Direct_handle_state = HANDLE_RPC;
+			sFWS2_t.Direct_handle_rpc = IN_RPC;
+		}
+		
 	}
-	else if(sFWS2_t.Direct_handle_rpc == NOT_IN_RPC)
+	else if(gpio_input_data_bit_read(GPIOB,GPIO_PINS_6) == true)
 	{
+		rpc_times = 0x00;
+		sFWS2_t.Direct_handle_rpc = NOT_IN_RPC;
 		sFWS2_t.Direct_handle_state = HANDLE_WORKING;
 	}
 }

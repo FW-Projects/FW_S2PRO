@@ -60,6 +60,7 @@
 /* private typedef -----------------------------------------------------------*/
 /* add user code begin private typedef */
 #define FEED_DOG_TIME 100
+#define FAN_HANDLE_TIME 1000
 /* add user code end private typedef */
 
 /* private define ------------------------------------------------------------*/
@@ -152,6 +153,9 @@ int main(void)
   /* init tmr2 function. */
   wk_tmr2_init();
 
+  /* init tmr3 function. */
+  wk_tmr3_init();
+
   /* init crc function. */
   wk_crc_init();
 
@@ -169,9 +173,9 @@ int main(void)
   filter_init(&s1_adc, ADC_CHANNEL_1);
   filter_init(&s1_current, ADC_CHANNEL_8);
   BSP_UsartInit();
-  PID_Init(&pid_210, 50, 0.1, 10, 3333);
-//  PID_Init(&pid_210, 50, 0.2, 10, 3333);
-  PID_Init(&pid_245, 100, 0.4, 10, 10000);
+//  PID_Init(&pid_210, 50, 0.1, 10, 3333);
+  PID_Init(&pid_210, 20, 0.4, 10, 3333);
+  PID_Init(&pid_245, 200, 1, 5, 10000);
   gpio_bits_set(GPIOB, GPIO_PINS_11); // LCD_OPEN
   LCD_Init();                                                                                                                                                                                                                          
   LCD_Clear(BLACK);
@@ -246,6 +250,8 @@ void key_task(void)
 #endif
 }
 
+
+
 /**
  * @brief  flash task function
  * @param  none
@@ -265,7 +271,7 @@ void feed_dog_task(void)
   {
     first_in = true;
     /* if enabled, please feed the dog through wdt_counter_reload() function */
-    //	 wdt_enable();
+   //	 wdt_enable();
   }
   wdt_counter_reload();
 }

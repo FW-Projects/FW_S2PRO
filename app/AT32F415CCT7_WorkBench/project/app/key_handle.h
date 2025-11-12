@@ -1,8 +1,7 @@
 #ifndef _KEY_HANDLE_H
 #define _KEY_HANDLE_H
 #include "key.h"
-#define KEY_HANDLE_TIME 15
-#define HEL_TIME 90
+#define KEY_HANDLE_TIME 10
 #include "stdbool.h"
 #define KEY_TASK_TIME          20
 typedef enum
@@ -49,6 +48,7 @@ typedef enum
 	SET_SLEEP_TIME_REDUCE_FIVE,
 	SET_RESET,
 	RESET_BE02_VALUE,
+	SET_LANGUAGE_MODE,
 	
 	END_EVENT,
 

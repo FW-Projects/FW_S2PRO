@@ -24,4 +24,4 @@
   D:\keil5.42\GorgonMeducer\perf_counter\2.4.0\perf_counter.h \
   D:\keil5.42\GorgonMeducer\perf_counter\2.4.0\perfc_port_default.h \
   ..\..\libraries\cmsis\cm4\core_support\cmsis_compiler.h \
-  ..\app\key_handle.h ..\device\key.h
+  ..\app\key_handle.h ..\device\key.h ..\system\adc_filter.h

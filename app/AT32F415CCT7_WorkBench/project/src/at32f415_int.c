@@ -43,6 +43,7 @@
 #include "PC_comm_handle.h"
 #include "perf_counter.h"
 #include "key_handle.h"
+#include "adc_filter.h"
 /* add user code end private includes */
 
 /* private typedef -----------------------------------------------------------*/
@@ -52,7 +53,12 @@
 
 /* private define ------------------------------------------------------------*/
 /* add user code begin private define */
+#define PID_RUN_TIME         10
+#define ADC_VREF            (3.3)
+#define ADC_TEMP_BASE       (1.26)
+#define ADC_TEMP_SLOPE      (-0.00423)
 
+#define GET_MCU_TEMP_TIME   500
 /* add user code end private define */
 
 /* private macro -------------------------------------------------------------*/
@@ -62,7 +68,7 @@
 
 /* private variables ---------------------------------------------------------*/
 /* add user code begin private variables */
-
+__IO uint16_t adc1_ordinary_value = 0;
 /* add user code end private variables */
 
 /* private function prototypes --------------------------------------------*/
@@ -229,7 +235,7 @@ void SysTick_Handler(void)
   static uint8_t beep_run_time = BEEP_HANDLE_TIME;
   static uint8_t key_run_time = KEY_HANDLE_TIME;
   static uint8_t beep_warning_time = 10;
-
+	static uint16_t get_mcu_temp_time = GET_MCU_TEMP_TIME;
 	
   beep_run_time--;
 
@@ -270,10 +276,24 @@ void SysTick_Handler(void)
 //    pid_run_time = 10;
 	pid_run_time = 5;
   }
+  
+   get_mcu_temp_time --;
+
+    if (!get_mcu_temp_time)
+    {
+       /* get mcu temp */
+       adc1_ordinary_value = get_adcval(ADC_CHANNEL_16);
+       sFWS2_t.base.cpu_temp = (ADC_TEMP_BASE - (double)adc1_ordinary_value * ADC_VREF / 4096) / ADC_TEMP_SLOPE + 25;
+       get_mcu_temp_time = GET_MCU_TEMP_TIME;
+    }
+  
+  
 	rpc_control();
 
 	sleep_control();
 
+  
+  
 
   /* add user code end SysTick_IRQ 0 */
 
@@ -284,13 +304,6 @@ void SysTick_Handler(void)
   USART1_TimeOutCounter();
   /* add user code end SysTick_IRQ 1 */
 }
-
-/**
-  * @brief  this function handles USART1 handler.
-  * @param  none
-  * @retval none
-  */
-
 
 /* add user code begin 1 */
 

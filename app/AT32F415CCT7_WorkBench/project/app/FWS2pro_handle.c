@@ -38,7 +38,7 @@ void FWS2_Init(FWS2_Handle *FWS2)
 	FWS2->general_parameter.display_lock_state = LOCK,
 	FWS2->general_parameter.ota_state = OTA_OFF,
 	FWS2->general_parameter.uart_state = UART_CLOSE,
-
+	FWS2->general_parameter.language_state = CHINESE,
 	FWS2->general_parameter.last_Heating_stick = 1;
 
 	FWS2->general_parameter.ch = 0,
@@ -59,6 +59,7 @@ void FWS2_Init(FWS2_Handle *FWS2)
 	FWS2->page = LOGO;
 	FWS2->last_page = LOGO;
 	FWS2->base.pwm_out = 0x00;
-
+	FWS2->base.cpu_temp = 0x00;
 	FWS2->init_flag = false;
+	FWS2->rpc_state = false;
 }

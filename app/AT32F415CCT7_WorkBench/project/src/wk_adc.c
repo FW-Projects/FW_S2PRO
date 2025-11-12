@@ -64,6 +64,8 @@ void wk_adc1_init(void)
 
   crm_adc_clock_div_set(CRM_ADC_DIV_4);
 
+  adc_tempersensor_vintrv_enable(TRUE);
+
   /*adc_settings--------------------------------------------------------------------*/ 
   adc_base_default_para_init(&adc_base_struct);
   adc_base_struct.sequence_mode = FALSE;

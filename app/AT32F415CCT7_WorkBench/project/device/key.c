@@ -201,7 +201,7 @@ key_event_t key_event_check(key_obj *key) {
                 key->press_count = 0;
                 key->long_press_triggered = 0;
             } else {
-                key->press_count++;
+                 key->press_count++;
                 
                 // 检查是否达到长按时间
                 if (key->press_count >= key->long_press_count) {
@@ -214,6 +214,7 @@ key_event_t key_event_check(key_obj *key) {
                         key->click_count = 0; // 长按时重置点击计数，避免影响双击
                     }
                 }
+
             }
             break;
             

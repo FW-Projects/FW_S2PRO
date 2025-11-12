@@ -12,6 +12,7 @@
         <Mode>
             <ModeSub name="IN1" value="TRUE"/>
             <ModeSub name="IN8" value="TRUE"/>
+            <ModeSub name="IN-TempSens" value="TRUE"/>
         </Mode>
         <Parameters>
             <ParametersSub name="OrdinaryTriggerSource" value="ADC12_ORDINARY_TRIG_SOFTWARE"/>
@@ -84,6 +85,17 @@
             <ParametersSub name="OCMode_4" value="TMR_OUTPUT_CONTROL_PWM_MODE_B"/>
         </Parameters>
     </TMR2>
+    <TMR3>
+        <Mode>
+            <ModeSub name="Channel4 mode" value="Output_CH4"/>
+            <ModeSub name="Activated" value="TRUE"/>
+        </Mode>
+        <Parameters>
+            <ParametersSub name="Period" value="4599"/>
+            <ParametersSub name="OCMode_4" value="TMR_OUTPUT_CONTROL_PWM_MODE_A"/>
+            <ParametersSub name="OCPolarity_4" value="TMR_OUTPUT_ACTIVE_LOW"/>
+        </Parameters>
+    </TMR3>
     <USART1>
         <Mode>
             <ModeSub name="Mode" value="Asynchronous"/>
@@ -113,6 +125,7 @@
         <DMA1_Channel1_IRQHandler>0;0;0;0;0</DMA1_Channel1_IRQHandler>
         <ADC1_IRQHandler>0;0;0;0;0</ADC1_IRQHandler>
         <TMR2_GLOBAL_IRQHandler>0;0;0;0;0</TMR2_GLOBAL_IRQHandler>
+        <TMR3_GLOBAL_IRQHandler>0;0;0;0;0</TMR3_GLOBAL_IRQHandler>
         <SPI1_IRQHandler>0;0;0;0;0</SPI1_IRQHandler>
         <SPI2_IRQHandler>0;0;0;0;0</SPI2_IRQHandler>
         <USART1_IRQHandler>1;0;0;0;0</USART1_IRQHandler>
@@ -170,6 +183,7 @@
         <PinSub pinname="PA6" signalname="SPI1_MISO" signaltype="3"/>
         <PinSub pinname="PA7" signalname="SPI1_MOSI" signaltype="3"/>
         <PinSub pinname="PB0" signalname="ADC1_IN8" signaltype="3"/>
+        <PinSub pinname="PB1" signalname="TMR3_CH4" signaltype="3"/>
         <PinSub pinname="PB11" signalname="GPIO_Output" signaltype="3"/>
         <PinSub pinname="PB12" signalname="GPIO_Output" signaltype="3"/>
         <PinSub pinname="PB13" signalname="SPI2_SCK" signaltype="3"/>
