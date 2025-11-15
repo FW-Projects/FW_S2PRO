@@ -34,6 +34,7 @@ void LCD_VISION(uint16_t x, uint16_t y,  uint8_t len, uint16_t fc, uint16_t bc, 
 void LCD_CH(uint16_t x, uint16_t y,  uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey,uint8_t in_ch);
 void LCD_MIN(uint16_t x, uint16_t y,  uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey);
 void LCD_Show_SLEEP_TIME(uint16_t x, uint16_t y, float num, uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey);
+void LCD_SHOW_BLACK(uint16_t x, uint16_t y, uint16_t num, uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey);
 void LCD_ShowPicture(uint16_t x, uint16_t y, uint16_t length, uint16_t width, const uint8_t pic[]);
 void LCD_Test(void);
 void LCD_Display(void);
@@ -126,43 +127,127 @@ void LCD_Show_Curve(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, float s1
 #define PIC_ADDRESS_52 0x0066AD10
 #define PIC_ADDRESS_53 0x0066B054
 #define PIC_ADDRESS_54 0x0066B398
-#define PIC_ADDRESS_55 0x0066C798
-#define PIC_ADDRESS_56 0x0066DB98
-#define PIC_ADDRESS_57 0x0066EF98
-#define PIC_ADDRESS_58 0x00670398
-#define PIC_ADDRESS_59 0x00671798
-#define PIC_ADDRESS_60 0x00672B98
-#define PIC_ADDRESS_61 0x00672EB6
-#define PIC_ADDRESS_62 0x006731D4
-#define PIC_ADDRESS_63 0x006734A6
-#define PIC_ADDRESS_64 0x00673778
-#define PIC_ADDRESS_65 0x0067BD10
-#define PIC_ADDRESS_66 0x006842A8
-#define PIC_ADDRESS_67 0x0068C2CC
-#define PIC_ADDRESS_68 0x006942F0
-#define PIC_ADDRESS_69 0x0069C314
-#define PIC_ADDRESS_70 0x006A4338
-#define PIC_ADDRESS_71 0x006AC35C
-#define PIC_ADDRESS_72 0x006B4380
-#define PIC_ADDRESS_73 0x006BC3A4
-#define PIC_ADDRESS_74 0x006C43C8
-#define PIC_ADDRESS_75 0x006C55D4
-#define PIC_ADDRESS_76 0x006C67E0
-#define PIC_ADDRESS_77 0x006C79EC
-#define PIC_ADDRESS_78 0x006C8BF8
-#define PIC_ADDRESS_79 0x006C9918
-#define PIC_ADDRESS_80 0x006CA638
-#define PIC_ADDRESS_81 0x006CB358
-#define PIC_ADDRESS_82 0x006CC078
-#define PIC_ADDRESS_83 0x006CD7D8
-#define PIC_ADDRESS_84 0x006CEF38
-#define PIC_ADDRESS_85 0x006D0698
-#define PIC_ADDRESS_86 0x006D1DF8
-#define PIC_ADDRESS_87 0x006D1F00
-//#define PIC_ADDRESS_88 
-//#define PIC_ADDRESS_89 
-//#define PIC_ADDRESS_90 
-//#define PIC_ADDRESS_91 
+#define PIC_ADDRESS_55 0x0066C398
+#define PIC_ADDRESS_56 0x0066D398
+#define PIC_ADDRESS_57 0x0066E398
+#define PIC_ADDRESS_58 0x0066F398
+#define PIC_ADDRESS_59 0x00670398
+#define PIC_ADDRESS_60 0x00671398
+#define PIC_ADDRESS_61 0x006716B6
+#define PIC_ADDRESS_62 0x006719D4
+#define PIC_ADDRESS_63 0x00671CA6
+#define PIC_ADDRESS_64 0x00671F78
+#define PIC_ADDRESS_65 0x0067A510
+#define PIC_ADDRESS_66 0x00682AA8
+#define PIC_ADDRESS_67 0x0068AACC
+#define PIC_ADDRESS_68 0x00692AF0
+#define PIC_ADDRESS_69 0x0069AB14
+#define PIC_ADDRESS_70 0x006A2B38
+#define PIC_ADDRESS_71 0x006AAB5C
+#define PIC_ADDRESS_72 0x006B2B80
+#define PIC_ADDRESS_73 0x006BABA4
+#define PIC_ADDRESS_74 0x006C2BC8
+#define PIC_ADDRESS_75 0x006C3DD4
+#define PIC_ADDRESS_76 0x006C4FE0
+#define PIC_ADDRESS_77 0x006C61EC
+#define PIC_ADDRESS_78 0x006C73F8
+#define PIC_ADDRESS_79 0x006C8118
+#define PIC_ADDRESS_80 0x006C8E38
+#define PIC_ADDRESS_81 0x006C9B58
+#define PIC_ADDRESS_82 0x006CA878
+#define PIC_ADDRESS_83 0x006CBFD8
+#define PIC_ADDRESS_84 0x006CD738
+#define PIC_ADDRESS_85 0x006CEE98
+#define PIC_ADDRESS_86 0x006D05F8
+#define PIC_ADDRESS_87 0x006D0700
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

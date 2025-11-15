@@ -597,6 +597,55 @@ void LCD_ShowIntNum(uint16_t x, uint16_t y, uint16_t num, uint8_t len, uint16_t 
     }
 }
 
+void LCD_SHOW_BLACK(uint16_t x, uint16_t y, uint16_t num, uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey)
+{
+	uint8_t t, temp;
+    uint8_t enshow = 0;
+    uint8_t sizex = sizey / 2;
+
+    for (t = 0; t < len; t++)
+    {
+        temp = (num / mypow(10, len - t - 1)) % 10;
+
+        if (enshow == 0 && t < (len - 1))
+        {
+            if (temp == 0)
+            {
+                LCD_ShowChar(x + t * sizex, y, ' ', fc, bc, sizey, 0);
+                continue; 
+            }
+            else
+            {
+                enshow = 1;
+            }
+        }
+
+        LCD_ShowChar(x + t * sizex, y,' ', fc, bc, sizey, 0);
+    }
+	
+	
+    for (t = 0; t < len; t++)
+    {	
+	   switch(t)
+		{
+			case 1:
+				LCD_ShowChar(x + t * sizex, y, ' ' , fc, bc, sizey, 0);
+				break;
+			case 2:
+				LCD_ShowChar(x + t * sizex, y, ' ' , fc, bc, sizey, 0);
+				break;
+			case 3:
+				LCD_ShowChar(x + t * sizex, y, ' ', fc, bc, sizey, 0);
+				break;
+			case 4:
+				LCD_ShowChar(x + t * sizex, y, ' ' , fc, bc, sizey, 0);
+				break;
+		}
+		
+		
+    }
+}
+
 void LCD_Show_SLEEP_TIME(uint16_t x, uint16_t y, float num, uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey)
 {
     uint8_t t, temp;

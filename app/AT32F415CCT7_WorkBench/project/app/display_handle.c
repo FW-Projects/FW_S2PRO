@@ -98,7 +98,7 @@ static void show_curve(void)
 
     if (sFWS2_t.Direct_handle_Heating_stick == HANDLE_210)
     {
-        power_curve = sFWS2_t.base.pwm_out / 33;
+        power_curve = sFWS2_t.base.pwm_out / 45;
     }
     else if (sFWS2_t.Direct_handle_Heating_stick == HANDLE_245)
     {
@@ -492,31 +492,35 @@ static void show_actual_temp(void)
         }
 
         /* show unit icon */
-        if (sFWS2_t.general_parameter.temp_unit == CELSIUS)
-        {
-            if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245)
-            {
-                TranferPicturetoTFT_LCD(C_F_main_symbol.x1, C_F_main_symbol.y1, C_F_main_symbol.length, C_F_main_symbol.winth, MAIN_CELSIUS_ICON_PICTURE);
-            }
-            else if (sFWS2_t.page == SET_TEMP_CAL_PAGE_CN)
-            {
-                TranferPicturetoTFT_LCD(C_F_menu_symbol.x1, C_F_menu_symbol.y1, C_F_menu_symbol.length, C_F_menu_symbol.winth, MENU_CELSIUS_ICON_PICTURE);
-                TranferPicturetoTFT_LCD(C_F_menu_symbol.x1, C_F_menu_symbol.y1 + 39, C_F_menu_symbol.length, C_F_menu_symbol.winth, MENU_CELSIUS_ICON_PICTURE);
-            }
-        }
-        else if (sFWS2_t.general_parameter.temp_unit == FAHRENHEIT)
-        {
-            if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245)
-            {
-                TranferPicturetoTFT_LCD(C_F_main_symbol.x1, C_F_main_symbol.y1, C_F_main_symbol.length, C_F_main_symbol.winth, MAIN_FAHRENHEIT_ICON_PICTURE);
-            }
-            else if (sFWS2_t.page == SET_TEMP_CAL_PAGE_CN)
-            {
-                TranferPicturetoTFT_LCD(C_F_menu_symbol.x1, C_F_menu_symbol.y1, C_F_menu_symbol.length, C_F_menu_symbol.winth, MENU_FAHRENHEIT_ICON_PICTURE);
-                TranferPicturetoTFT_LCD(C_F_menu_symbol.x1, C_F_menu_symbol.y1 + 39, C_F_menu_symbol.length, C_F_menu_symbol.winth, MENU_FAHRENHEIT_ICON_PICTURE);
-            }
-        }
-        sFWS2_t.general_parameter.last_temp_unit = sFWS2_t.general_parameter.temp_unit;
+		if(sFWS2_t.Direct_handle_state != HANDLE_SLEEP)
+		{
+			if (sFWS2_t.general_parameter.temp_unit == CELSIUS)
+			{
+				if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245)
+				{
+					TranferPicturetoTFT_LCD(C_F_main_symbol.x1, C_F_main_symbol.y1, C_F_main_symbol.length, C_F_main_symbol.winth, MAIN_CELSIUS_ICON_PICTURE);
+				}
+				else if (sFWS2_t.page == SET_TEMP_CAL_PAGE_CN)
+				{
+					TranferPicturetoTFT_LCD(C_F_menu_symbol.x1, C_F_menu_symbol.y1, C_F_menu_symbol.length, C_F_menu_symbol.winth, MENU_CELSIUS_ICON_PICTURE);
+					TranferPicturetoTFT_LCD(C_F_menu_symbol.x1, C_F_menu_symbol.y1 + 39, C_F_menu_symbol.length, C_F_menu_symbol.winth, MENU_CELSIUS_ICON_PICTURE);
+				}
+			}
+			else if (sFWS2_t.general_parameter.temp_unit == FAHRENHEIT)
+			{
+				if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245)
+				{
+					TranferPicturetoTFT_LCD(C_F_main_symbol.x1, C_F_main_symbol.y1, C_F_main_symbol.length, C_F_main_symbol.winth, MAIN_FAHRENHEIT_ICON_PICTURE);
+				}
+				else if (sFWS2_t.page == SET_TEMP_CAL_PAGE_CN)
+				{
+					TranferPicturetoTFT_LCD(C_F_menu_symbol.x1, C_F_menu_symbol.y1, C_F_menu_symbol.length, C_F_menu_symbol.winth, MENU_FAHRENHEIT_ICON_PICTURE);
+					TranferPicturetoTFT_LCD(C_F_menu_symbol.x1, C_F_menu_symbol.y1 + 39, C_F_menu_symbol.length, C_F_menu_symbol.winth, MENU_FAHRENHEIT_ICON_PICTURE);
+				}
+			}
+		   
+		}
+		 sFWS2_t.general_parameter.last_temp_unit = sFWS2_t.general_parameter.temp_unit;
     }
 	
     if (sFWS2_t.Direct_handle_state == HANDLE_SLEEP && sFWS2_t.page != CURVE_PAGE)
@@ -565,7 +569,7 @@ static void show_actual_temp(void)
 //                                   actual_temp_1.len, actual_temp_1.fc, actual_temp_1.bc, actual_temp_1.sizey);
 
 //                }
-				if(sFWS2_t.Direct_handle_state == HANDLE_WORKING)
+				if(sFWS2_t.Direct_handle_state == HANDLE_WORKING || sFWS2_t.Direct_handle_state == HANDLE_RPC)
 				{
 					if (sFWS2_t.general_parameter.display_lock_state == LOCK)
 					{
@@ -608,7 +612,12 @@ static void show_actual_temp(void)
 
                 if (sFWS2_t.Direct_handle_position == IN_POSSITION)
                 {
-                    LCD_ShowIntNum(actual_temp_3.x, actual_temp_3.y, *actual_temp_3.num,
+					
+					if (sFWS2_t.general_parameter.temp_unit == FAHRENHEIT)
+								LCD_ShowIntNum(actual_temp_3.x, actual_temp_3.y, sFWS2_t.base.actual_temp_f_display + cal,
+										   actual_temp_3.len, actual_temp_3.fc, actual_temp_3.bc, actual_temp_3.sizey);
+					else if (sFWS2_t.general_parameter.temp_unit == CELSIUS)
+						LCD_ShowIntNum(actual_temp_3.x, actual_temp_3.y, *actual_temp_3.num,
                                    actual_temp_3.len, actual_temp_3.fc, actual_temp_3.bc, actual_temp_3.sizey);
                 }
                 else
@@ -618,20 +627,35 @@ static void show_actual_temp(void)
                         if ((sFWS2_t.base.actual_temp - sFWS2_t.base.cal_data) < (sFWS2_t.base.set_temp + LOCK_RANGE) &&
                             (sFWS2_t.base.actual_temp - sFWS2_t.base.cal_data) > (sFWS2_t.base.set_temp - LOCK_RANGE))
                         {
-                            LCD_ShowIntNum(actual_temp_3.x, actual_temp_3.y, *actual_temp_3.num + cal,
+							if (sFWS2_t.general_parameter.temp_unit == CELSIUS)
+								LCD_ShowIntNum(actual_temp_3.x, actual_temp_3.y, sFWS2_t.base.set_temp,
+                                           actual_temp_3.len, actual_temp_3.fc, actual_temp_3.bc,
+                                           actual_temp_3.sizey);
+							else if (sFWS2_t.general_parameter.temp_unit == FAHRENHEIT)
+								LCD_ShowIntNum(actual_temp_3.x, actual_temp_3.y, sFWS2_t.base.set_temp_f_display,
                                            actual_temp_3.len, actual_temp_3.fc, actual_temp_3.bc,
                                            actual_temp_3.sizey);
                         }
                         else
                         {
-                            LCD_ShowIntNum(actual_temp_3.x, actual_temp_3.y, *actual_temp_3.num + cal,
+							if (sFWS2_t.general_parameter.temp_unit == CELSIUS)
+								LCD_ShowIntNum(actual_temp_3.x, actual_temp_3.y, *actual_temp_3.num + cal,
+                                           actual_temp_3.len, actual_temp_3.fc, actual_temp_3.bc,
+                                           actual_temp_3.sizey);
+							else if (sFWS2_t.general_parameter.temp_unit == FAHRENHEIT)
+								LCD_ShowIntNum(actual_temp_3.x, actual_temp_3.y, sFWS2_t.base.actual_temp_f_display + cal,
                                            actual_temp_3.len, actual_temp_3.fc, actual_temp_3.bc,
                                            actual_temp_3.sizey);
                         }
                     }
                     else if (sFWS2_t.general_parameter.display_lock_state == UNLOCK)
                     {
-                        LCD_ShowIntNum(actual_temp_3.x, actual_temp_3.y, *actual_temp_3.num + cal,
+						if (sFWS2_t.general_parameter.temp_unit == CELSIUS)
+							LCD_ShowIntNum(actual_temp_3.x, actual_temp_3.y, *actual_temp_3.num + cal,
+                                       actual_temp_3.len, actual_temp_3.fc, actual_temp_3.bc,
+                                       actual_temp_3.sizey);
+						else if (sFWS2_t.general_parameter.temp_unit == FAHRENHEIT)
+							LCD_ShowIntNum(actual_temp_3.x, actual_temp_3.y,  sFWS2_t.base.actual_temp_f_display + cal,
                                        actual_temp_3.len, actual_temp_3.fc, actual_temp_3.bc,
                                        actual_temp_3.sizey);
                     }
@@ -653,7 +677,7 @@ static void show_power_bar(void)
         refesh_time = POWER_BAR_REFRESH_TIME;
         if (sFWS2_t.Direct_handle_Heating_stick == HANDLE_210)
         {
-            output = sFWS2_t.base.pwm_out / 33.33;
+            output = sFWS2_t.base.pwm_out / 45;
         }
         else if (sFWS2_t.Direct_handle_Heating_stick == HANDLE_245)
         {
@@ -966,6 +990,22 @@ static void show_icon(void)
     {
         TranferPicturetoTFT_LCD(return_1.x1, return_1.y1, return_1.length, return_1.winth, RETURN_ICON_PICTURE_CN);
     }
+	
+	    //    /* show handle work state */
+    if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245)
+    {
+        if (sFWS2_t.last_Direct_handle_state != sFWS2_t.Direct_handle_state)
+        {
+            if (sFWS2_t.Direct_handle_state == HANDLE_SLEEP)
+            {
+				LCD_SHOW_BLACK(50,68,0x00,3,WHITE,BLACK,120); //¸Ç×¡ÎÂ¶È
+				LCD_SHOW_BLACK(250,92,0x00,3,WHITE,BLACK,16);
+                TranferPicturetoTFT_LCD(95, 75, 150, 114, SLEEP_STATE_PICTURE_CN);
+            }
+            sFWS2_t.last_Direct_handle_state = sFWS2_t.Direct_handle_state;
+            sFWS2_t.base.last_run_disp_state = RESET_VALUE;
+        }
+    }
 
     /* show base handle error state*/
     //	if (sFWS2_t.last_Direct_handle_error_state != sFWS2_t.Direct_handle_error_state || sFWS2_t.last_page != sFWS2_t.page)
@@ -1041,20 +1081,6 @@ void show_navigation_bar(void)
 		LCD_VISION(vision_2.x, vision_2.y, vision_2.len, vision_2.fc, vision_2.bc, vision_2.sizey);
         sFWS2_t.general_parameter.last_speak_state = RESET_VALUE;
         in_first = true;
-    }
-
-    //    /* show handle work state */
-    if (sFWS2_t.page == WORK_PAGE_210 || sFWS2_t.page == WORK_PAGE_245 || sFWS2_t.page == CURVE_PAGE)
-    {
-        if (sFWS2_t.last_Direct_handle_state != sFWS2_t.Direct_handle_state)
-        {
-            if (sFWS2_t.Direct_handle_state == HANDLE_SLEEP && sFWS2_t.page != CURVE_PAGE)
-            {
-                TranferPicturetoTFT_LCD(95, 75, 150, 114, SLEEP_STATE_PICTURE_CN);
-            }
-            sFWS2_t.last_Direct_handle_state = sFWS2_t.Direct_handle_state;
-            sFWS2_t.base.last_run_disp_state = RESET_VALUE;
-        }
     }
 
     /* show beep icon */
@@ -1176,38 +1202,38 @@ static number power_data_1 =
 
 static number ch1_set_temp_1 =
     {
-        .x = 74,
+        .x = 79,
         .y = 205,
         .num = &sFWS2_t.general_parameter.ch1_set_temp,
         .len = 3,
         .fc = WHITE,
         .bc = 0x3186,
-        .sizey = 24,
+        .sizey = 16,
         .mode = 0,
 };
 
 static number ch2_set_temp_1 =
     {
-        .x = 145,
+        .x = 151,
         .y = 205,
         .num = &sFWS2_t.general_parameter.ch2_set_temp,
         .len = 3,
         .fc = WHITE,
         .bc = 0x3186,
-        .sizey = 24,
+        .sizey = 16,
         .mode = 0,
 };
 
 static number ch3_set_temp_1 =
     {
-        .x = 216,
+        .x = 222,
         .y = 205,
         .num = &sFWS2_t.general_parameter.ch3_set_temp,
         .len = 3,
         .fc = WHITE,
         .bc = 0x3186,
 //		.bc = 0x0000,
-        .sizey = 24,
+        .sizey = 16,
         .mode = 0,
 };
 	
@@ -1344,21 +1370,21 @@ static icon_t ch1_frame =
         .x1 = 58,
         .y1 = 190,
         .length = 64,
-        .winth = 40,
+        .winth = 32,
 };
 static icon_t ch2_frame =
     {
         .x1 = 130,
         .y1 = 190,
         .length = 64,
-        .winth = 40,
+        .winth = 32,
 };
 static icon_t ch3_frame =
     {
         .x1 = 202,
         .y1 = 190,
         .length = 64,
-        .winth = 40,
+        .winth = 32,
 };
 	
 static icon_t ch1_frame_select =
@@ -1366,28 +1392,28 @@ static icon_t ch1_frame_select =
         .x1 = 58,
         .y1 = 190,
         .length = 64,
-        .winth = 40,
+        .winth = 32,
 };
 static icon_t ch2_frame_select =
     {
         .x1 = 130,
         .y1 = 190,
         .length = 64,
-        .winth = 40,
+        .winth = 32,
 };
 static icon_t ch3_frame_select =
     {
         .x1 = 202,
         .y1 = 190,
         .length = 64,
-        .winth = 40,
+        .winth = 32,
 };
 
 
 
 static icon_t beep =
     {
-        .x1 = 235,
+        .x1 = 247,
         .y1 = 3,
         .length = 19,
         .winth = 21,

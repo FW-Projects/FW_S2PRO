@@ -613,6 +613,9 @@ void handle_key_events(void)
 					sFWS2_t.set_work_mode = sFWS2_t.work_mode;
 				}
 				sbeep.status = BEEP_LONG;
+				sFWS2_t.base.last_actual_temp = 0xff;
+				sFWS2_t.base.last_actual_temp_f_display = 0xff;
+				sFWS2_t.last_Direct_handle_state = 0xff;
 			}
 			break;
 		default:

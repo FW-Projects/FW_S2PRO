@@ -172,12 +172,15 @@ int main(void)
   tmt.create(output_task, OUTPUT_HANDLE_TIME);
   filter_init(&s1_adc, ADC_CHANNEL_1);
   filter_init(&s1_current, ADC_CHANNEL_8);
+  
+//	PID_Init(&pid_210, 20, 0.4, 10, MAX_210_OUTDATA);
+//	PID_Init(&pid_245, 200, 1, 5, MAX_245_OUTDATA);
+
+	PID_Init(&pid_210, 50, 1, 10, MAX_210_OUTDATA);
+	PID_Init(&pid_245, 200, 1, 5, MAX_245_OUTDATA);
+  LCD_Init();                                
   BSP_UsartInit();
-//  PID_Init(&pid_210, 50, 0.1, 10, 3333);
-  PID_Init(&pid_210, 20, 0.4, 10, 3333);
-  PID_Init(&pid_245, 200, 1, 5, 10000);
-  gpio_bits_set(GPIOB, GPIO_PINS_11); // LCD_OPEN
-  LCD_Init();                                                                                                                                                                                                                          
+  iap_init();
   LCD_Clear(BLACK);
   TranferPicturetoTFT_LCD(0, 0, 320, 240, LOGO_PICTURE);
   TranferPicturetoTFT_LCD(0, 0, 320, 240, LOGO_PICTURE);

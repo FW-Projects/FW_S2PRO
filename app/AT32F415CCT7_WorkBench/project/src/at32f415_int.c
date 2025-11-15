@@ -268,13 +268,12 @@ void SysTick_Handler(void)
   if (!pid_run_time)
   {
     tmr_channel_value_set(TMR2, TMR_SELECT_CHANNEL_4, 0);
-    delay_us(100);
+    delay_us(120);
 	check_current();
     pwm_control();
     tmr_channel_value_set(TMR2, TMR_SELECT_CHANNEL_4, sFWS2_t.base.pwm_out);
     tmr_counter_enable(TMR2, TRUE);
-//    pid_run_time = 10;
-	pid_run_time = 5;
+    pid_run_time = 10;
   }
   
    get_mcu_temp_time --;
@@ -304,6 +303,7 @@ void SysTick_Handler(void)
   USART1_TimeOutCounter();
   /* add user code end SysTick_IRQ 1 */
 }
+
 
 /* add user code begin 1 */
 

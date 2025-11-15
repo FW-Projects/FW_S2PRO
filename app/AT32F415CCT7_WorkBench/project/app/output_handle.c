@@ -20,7 +20,7 @@ uint8_t off_set_buff[26] = {8, 7, 5, 4, 3, 2, 2, 2, 1, 0,
 void output_handle(void)
 {
 	check_handle();
-//	check_error_state();  
+	check_error_state();  
 	fan_control();
 }
 
@@ -139,6 +139,7 @@ void check_handle(void)
 			if(last_position_state == IN_POSSITION)
 			{
 				actual_refesh_time = 0;
+				sFWS2_t.general_parameter.last_temp_unit = 0xff;
 			}
 			last_position_state = sFWS2_t.Direct_handle_position;
 		}
@@ -249,11 +250,11 @@ void pwm_control(void)
 			PID_Clear_I(&pid_245);
 			if (sFWS2_t.Direct_handle_Heating_stick == HANDLE_245)
 			{
-				sFWS2_t.base.pwm_out = 10000;
+				sFWS2_t.base.pwm_out = MAX_245_OUTDATA;
 			}
 			else if (sFWS2_t.Direct_handle_Heating_stick == HANDLE_210)
 			{
-				sFWS2_t.base.pwm_out = 3333;
+				sFWS2_t.base.pwm_out = MAX_210_OUTDATA;
 			}
 		}
 	}
@@ -358,7 +359,7 @@ void sleep_control(void)
 void rpc_control(void)
 {
 	static uint8_t rpc_times = 0x00;
-	if(sFWS2_t.Direct_handle_rpc == IN_RPC)
+//	if(sFWS2_t.Direct_handle_rpc == IN_RPC)
 	if(gpio_input_data_bit_read(GPIOB,GPIO_PINS_6) == false)
 	{
 		rpc_times++;
@@ -368,7 +369,6 @@ void rpc_control(void)
 			sFWS2_t.Direct_handle_state = HANDLE_RPC;
 			sFWS2_t.Direct_handle_rpc = IN_RPC;
 		}
-		
 	}
 	else if(gpio_input_data_bit_read(GPIOB,GPIO_PINS_6) == true)
 	{
